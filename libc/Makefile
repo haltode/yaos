@@ -1,26 +1,22 @@
-DEFAULT_HOST!=../default-host.sh
-HOST?=DEFAULT_HOST
-HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
-
 CFLAGS?=-O2 -g
 CPPFLAGS?=
 LDFLAGS?=
 LIBS?=
 
-DESTDIR?=
+DEST_DIR?=
 PREFIX?=/usr/local
 EXEC_PREFIX?=$(PREFIX)
-INCLUDEDIR?=$(PREFIX)/include
-LIBDIR?=$(EXEC_PREFIX)/lib
+INCLUDE_DIR?=$(PREFIX)/include
+LIB_DIR?=$(EXEC_PREFIX)/lib
 
 CFLAGS:=$(CFLAGS) -ffreestanding -Wall -Wextra
 CPPFLAGS:=$(CPPFLAGS) -D__is_libc -Iinclude
 LIBK_CFLAGS:=$(CFLAGS)
 LIBK_CPPFLAGS:=$(CPPFLAGS) -D__is_libk
 
-ARCHDIR=arch/$(HOSTARCH)
+ARCH_DIR=arch/$(HOST_ARCH)
 
-include $(ARCHDIR)/make.config
+include $(ARCH_DIR)/make.config
 
 CFLAGS:=$(CFLAGS) $(ARCH_CFLAGS)
 CPPFLAGS:=$(CPPFLAGS) $(ARCH_CPPFLAGS)
@@ -82,12 +78,12 @@ clean:
 install: install-headers install-libs
 
 install-headers:
-	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
+	mkdir -p $(DEST_DIR)$(INCLUDE_DIR)
+	cp -R --preserve=timestamps include/. $(DEST_DIR)$(INCLUDE_DIR)/.
 
 install-libs: $(BINARIES)
-	mkdir -p $(DESTDIR)$(LIBDIR)
-	cp $(BINARIES) $(DESTDIR)$(LIBDIR)
+	mkdir -p $(DEST_DIR)$(LIB_DIR)
+	cp $(BINARIES) $(DEST_DIR)$(LIB_DIR)
 
 -include $(OBJS:.o=.d)
 -include $(LIBK_OBJS:.o=.d)

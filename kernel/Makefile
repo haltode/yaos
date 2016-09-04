@@ -1,26 +1,22 @@
-DEFAULT_HOST!=../default-host.sh
-HOST?=DEFAULT_HOST
-HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
-
 CFLAGS?=-O2 -g
 CPPFLAGS?=
 LDFLAGS?=
 LIBS?=
 
-DESTDIR?=
+DEST_DIR?=
 PREFIX?=/usr/local
 EXEC_PREFIX?=$(PREFIX)
-BOOTDIR?=$(EXEC_PREFIX)/boot
-INCLUDEDIR?=$(PREFIX)/include
+BOOT_DIR?=$(EXEC_PREFIX)/boot
+INCLUDE_DIR?=$(PREFIX)/include
 
 CFLAGS:=$(CFLAGS) -ffreestanding -Wall -Wextra
 CPPFLAGS:=$(CPPFLAGS) -D__is_kernel -Iinclude
 LDFLAGS:=$(LDFLAGS)
 LIBS:=$(LIBS) -nostdlib -lk -lgcc
 
-ARCHDIR=arch/$(HOSTARCH)
+ARCH_DIR=arch/$(HOST_ARCH)
 
-include $(ARCHDIR)/make.config
+include $(ARCH_DIR)/make.config
 
 CFLAGS:=$(CFLAGS) $(KERNEL_ARCH_CFLAGS)
 CPPFLAGS:=$(CPPFLAGS) $(KERNEL_ARCH_CPPFLAGS)
@@ -32,31 +28,31 @@ $(KERNEL_ARCH_OBJS) \
 kernel/kernel.o \
 
 OBJS=\
-$(ARCHDIR)/crti.o \
-$(ARCHDIR)/crtbegin.o \
+$(ARCH_DIR)/crti.o \
+$(ARCH_DIR)/crtbegin.o \
 $(KERNEL_OBJS) \
-$(ARCHDIR)/crtend.o \
-$(ARCHDIR)/crtn.o \
+$(ARCH_DIR)/crtend.o \
+$(ARCH_DIR)/crtn.o \
 
 LINK_LIST=\
 $(LDFLAGS) \
-$(ARCHDIR)/crti.o \
-$(ARCHDIR)/crtbegin.o \
+$(ARCH_DIR)/crti.o \
+$(ARCH_DIR)/crtbegin.o \
 $(KERNEL_OBJS) \
 $(LIBS) \
-$(ARCHDIR)/crtend.o \
-$(ARCHDIR)/crtn.o \
+$(ARCH_DIR)/crtend.o \
+$(ARCH_DIR)/crtn.o \
 
 .PHONY: all clean install install-headers install-kernel
 .SUFFIXES: .o .c .S
 
 all: yaos.kernel
 
-yaos.kernel: $(OBJS) $(ARCHDIR)/linker.ld
-	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST)
+yaos.kernel: $(OBJS) $(ARCH_DIR)/linker.ld
+	$(CC) -T $(ARCH_DIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST)
 	grub-file --is-x86-multiboot yaos.kernel
 
-$(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
+$(ARCH_DIR)/crtbegin.o $(ARCH_DIR)/crtend.o:
 	OBJ=`$(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
 .c.o:
@@ -73,11 +69,11 @@ clean:
 install: install-headers install-kernel
 
 install-headers:
-	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
+	mkdir -p $(DEST_DIR)$(INCLUDE_DIR)
+	cp -R --preserve=timestamps include/. $(DEST_DIR)$(INCLUDE_DIR)/.
 
 install-kernel: yaos.kernel
-	mkdir -p $(DESTDIR)$(BOOTDIR)
-	cp yaos.kernel $(DESTDIR)$(BOOTDIR)
+	mkdir -p $(DEST_DIR)$(BOOT_DIR)
+	cp yaos.kernel $(DEST_DIR)$(BOOT_DIR)
 
 -include $(OBJS:.o=.d)
