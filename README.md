@@ -32,6 +32,7 @@ TODO: insert images
 ## Resources used for this project
 
 - [OSDev.org](http://wiki.osdev.org/Main_Page)
+- [Bran's Kernel Development Tutorial](http://www.osdever.net/bkerndev/index.php)
 
 ## License
 
