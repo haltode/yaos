@@ -3,7 +3,7 @@
 
 #include "idt.h"
 
-struct idt_entry idt[NB_ENTRY_IDT];
+struct idt_entry idt[NB_IDT_ENTRY];
 struct idt_ptr idt_ptr;
 
 extern void idt_load();
@@ -23,13 +23,13 @@ void idt_set_entry(uint8_t num, uint32_t base, uint16_t selector, uint8_t flags)
 void idt_install(void)
 {
    /* Clear out the entire IDT, initializing it to zeros */
-   memset(&idt, 0, sizeof(struct idt_entry) * NB_ENTRY_IDT);
+   memset(&idt, 0, sizeof(struct idt_entry) * NB_IDT_ENTRY);
 
    /* Create the IDT */
    //idt_set_entry();
 
    /* Setup our IDT pointer */
-   idt_ptr.limit = (sizeof(struct idt_entry) * NB_ENTRY_IDT) - 1;
+   idt_ptr.limit = (sizeof(struct idt_entry) * NB_IDT_ENTRY) - 1;
    idt_ptr.base = &idt;
 
    /* Load our new IDT */

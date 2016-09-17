@@ -2,13 +2,12 @@
 
 #include "gdt.h"
 
-struct gdt_entry gdt[NB_ENTRY_GDT];
-struct gdt_ptr gp;
+struct gdt_entry gdt[NB_GDT_ENTRY];
+struct gdt_ptr gdt_ptr;
 
-/* Properly reload the new segment registers */
 extern void gdt_flush();
 
-void gdt_set_entry(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
+void gdt_set_entry(uint8_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
 {
    gdt[num].base_low = base & 0xFFFF;
    gdt[num].base_middle = (base >> 16) & 0xFF;
@@ -24,15 +23,15 @@ void gdt_set_entry(int num, uint32_t base, uint32_t limit, uint8_t access, uint8
 void gdt_install(void)
 {
    /* NULL descriptor */
-   gdt_set_entry(0, 0, 0, 0, 0);
+   gdt_set_entry(0, 0x0, 0x0, 0x0, 0x0);
    /* Code segment descriptor */
-   gdt_set_entry(1, 0, 0xFFFFFFFF, 0x9A, 0xC);
+   gdt_set_entry(1, 0x0, 0xFFFFFFFF, 0x9A, 0xC);
    /* Data segment descriptor */
-   gdt_set_entry(2, 0, 0xFFFFFFFF, 0x92, 0xC);
+   gdt_set_entry(2, 0x0, 0xFFFFFFFF, 0x92, 0xC);
 
    /* Setup our GDT pointer */
-   gp.limit = (sizeof(struct gdt_entry) * NB_ENTRY_GDT) - 1;
-   gp.base = &gdt;
+   gdt_ptr.limit = (sizeof(struct gdt_entry) * NB_GDT_ENTRY) - 1;
+   gdt_ptr.base = &gdt;
 
    /* Flush out the old GDT and install the new one */
    gdt_flush();

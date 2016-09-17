@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define NB_ENTRY_GDT 3
+#define NB_GDT_ENTRY 3
 
 /* GDT entry
 
@@ -32,8 +32,6 @@
 
 */
 
-/* We use the 'packed' attribute to prevent the compiler from optimizing the
-   structure */
 struct gdt_entry {
    uint16_t limit_low;
    uint16_t base_low;
@@ -44,8 +42,6 @@ struct gdt_entry {
    uint8_t base_high;
 } __attribute__((packed));
 
-/* GDT's pointer which includes the limit: the max bytes taken up by the GDT
-   minus 1 */
 struct gdt_ptr {
    uint16_t limit;
    uint32_t base;

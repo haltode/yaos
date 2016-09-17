@@ -5,8 +5,8 @@
 .global gdt_flush
 .type gdt_flush, @function
 gdt_flush:
-   # Load the GDT with our 'gp' which is a special pointer
-   lgdt gp
+   # Load the GDT with our external pointer 'gdt_ptr' (defined in the C code)
+   lgdt gdt_ptr
    # 0x08 is the offset to our code segment: far jump
    jmp $0x08, $reload_cs
 

@@ -5,7 +5,7 @@
 
 /* We are only using the first 32 entries here, but if any undefined IDT entry
    is hit, it will cause an "Unhandled Interrupt" exception */
-#define NB_ENTRY_IDT 256
+#define NB_IDT_ENTRY 256
 
 /* IDT entry
 
