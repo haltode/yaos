@@ -36,4 +36,7 @@ struct idt_ptr {
    uint32_t base;
 } __attribute__((packed));
 
+
+void idt_set_entry(uint8_t num, uint32_t base, uint16_t selector, uint8_t flags);
+
 #endif
