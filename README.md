@@ -33,6 +33,7 @@ TODO: insert images
 
 - [OSDev.org](http://wiki.osdev.org/Main_Page)
 - [Bran's Kernel Development Tutorial](http://www.osdever.net/bkerndev/index.php)
+- [How to Make a Computer Operating System](https://www.gitbook.com/book/samypesse/how-to-create-an-operating-system/details)
 
 ## License
 
