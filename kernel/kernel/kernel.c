@@ -1,7 +1,8 @@
 #include <stdio.h>
 
-#include <kernel/gdt.h>
 #include <kernel/tty.h>
+#include <kernel/gdt.h>
+#include <kernel/idt.h>
 
 void kernel_main(void)
 {
@@ -10,6 +11,9 @@ void kernel_main(void)
 
    gdt_install();
    puts("(kernel) GDT loaded.");
+
+   idt_install();
+   puts("(kernel) IDT loaded.");
 
    puts("Hello kernel World!");
 }
