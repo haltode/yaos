@@ -5,7 +5,11 @@
 
 void kernel_main(void)
 {
-   gdt_install();
    terminal_initialize();
-   printf("Hello, kernel World!\n");
+   puts("(kernel) TTY loaded.");
+
+   gdt_install();
+   puts("(kernel) GDT loaded.");
+
+   puts("Hello kernel World!");
 }

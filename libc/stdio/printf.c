@@ -3,6 +3,12 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+#if defined(__is_libk)
+#include <kernel/tty.h>
+#endif
 
 static bool print(const char* data, size_t length)
 {
@@ -13,70 +19,91 @@ static bool print(const char* data, size_t length)
    return true;
 }
 
+static bool isspecifier(const char c)
+{
+   static const char* specifiers = "dcs%";
+   const size_t spec_len = strlen(specifiers);
+
+   for(size_t i = 0; i < spec_len; ++i)
+      if(c == specifiers[i])
+         return true;
+   return false;
+}
+
 int printf(const char* restrict format, ...)
 {
    va_list parameters;
+   int written;
+
    va_start(parameters, format);
+   written = 0;
+   
+   for(size_t i = 0; format[i] != '\0'; ++i) {
+      /* Specifiers */
+      if(format[i] == '%') {
+         ++i;
 
-   int written = 0;
-
-   while(*format != '\0') {
-      size_t maxrem = INT_MAX - written;
-
-      if(format[0] != '%' || format[1] == '%') {
-         if(format[0] == '%')
-            ++format;
-         size_t amount = 1;
-         while(format[amount] && format[amount] != '%')
-            ++amount;
-         if(maxrem < amount) {
-            // TODO: Set errno to EOVERFLOW.
-            return -1;
+         /* Skip everything useless after the % (spaces, tab, etc.) */
+         while(format[i] != '\0' && !isspecifier(format[i])) {
+            /* Unknown specifier */
+            if(isalpha(format[i]))
+               return -1;
+            ++i;
          }
-         if(!print(format, amount))
+         /* Check if we have a specifier or not */
+         if(format[i] == '\0')
             return -1;
-         format += amount;
-         written += amount;
-         continue;
+
+         /* int */
+         if(format[i] == 'd') {
+            int number = va_arg(parameters, int);
+            char str[8];
+            size_t len;
+
+            itoa(number, str, 10);
+            len = strlen(str);
+            if(!print(str, len))
+               return -1;
+            written += len;
+         }
+         /* char */
+         else if(format[i] == 'c') {
+            /* char promotes to int */
+            char c = (char) va_arg(parameters, int);
+            if(!print(&c, sizeof(c)))
+               return -1;
+            ++written;
+         }
+         /* string */
+         else if(format[i] == 's') {
+            char* str = va_arg(parameters, char*);
+            size_t len = strlen(str);
+            if(!print(str, len))
+               return -1;
+            written += len;
+         }
+         /* '%' */
+         else if(format[i] == '%') {
+            char c = '%';
+            if(!print(&c, sizeof(c)))
+               return -1;
+            ++written;
+         }
       }
-
-      const char* format_begun_at = format;
-      ++format;
-
-      if(*format == 'c') {
-         ++format;
-         char c = (char) va_arg(parameters, int /* char promotes to int */);
-         if(!maxrem) {
-            // TODO: Set errno to EOVERFLOW.
-            return -1;
-         }
-         if(!print(&c, sizeof(c)))
+      /* Escape sequences (newline) */
+      else if(format[i] == '\n') {
+         #if defined(__is_libk)
+            terminal_newline();
+            ++written;
+         #else
+         #endif
+      }
+      /* Normal character */
+      else {
+         char c = format[i];
+         if(!print(&c, sizeof(c))) 
             return -1;
          ++written;
-      }
-      else if(*format == 's') {
-         ++format;
-         const char* str = va_arg(parameters, const char*);
-         size_t len = strlen(str);
-         if(maxrem < len) {
-            // TODO: Set errno to EOVERFLOW.
-            return -1;
-         }
-         if(!print(str, len))
-            return -1;
-         written += len;
-      }
-      else {
-         format = format_begun_at;
-         size_t len = strlen(format);
-         if (maxrem < len) {
-            // TODO: Set errno to EOVERFLOW.
-            return -1;
-         }
-         if (!print(format, len))
-            return -1;
-         written += len;
-         format += len;
       }
    }
 
