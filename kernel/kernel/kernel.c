@@ -5,6 +5,7 @@
 #include <kernel/idt.h>
 #include <kernel/isr.h>
 #include <kernel/irq.h>
+#include <kernel/timer.h>
 
 void kernel_main(void)
 {
@@ -20,9 +21,11 @@ void kernel_main(void)
    puts("(kernel) ISR loaded.");
    irq_install();
    puts("(kernel) IRQ loaded.");
-
    /* Now we can allow IRQs to happen */
    __asm__ __volatile__ ("sti");
+
+   timer_install();
+   puts("(kernel) Timer loaded.");
 
    puts("");
    puts("Hello kernel World!");

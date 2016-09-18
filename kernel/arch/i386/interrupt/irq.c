@@ -1,9 +1,12 @@
 #include <stdint.h>
 
+#include <kernel/isr.h>
 #include <kernel/io.h>
 
-#include "isr.h"
 #include "idt.h"
+
+extern void outb(uint32_t port, uint8_t val);
+extern uint8_t inb(uint32_t port);
 
 #define NB_IRQ_ROUTINES 16
 

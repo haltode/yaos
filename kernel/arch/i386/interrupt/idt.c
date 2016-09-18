@@ -25,9 +25,6 @@ void idt_install(void)
    /* Clear out the entire IDT, initializing it to zeros */
    memset(&idt, 0, sizeof(struct idt_entry) * NB_IDT_ENTRY);
 
-   /* Create the IDT */
-   //idt_set_entry();
-
    /* Setup our IDT pointer */
    idt_ptr.limit = (sizeof(struct idt_entry) * NB_IDT_ENTRY) - 1;
    idt_ptr.base = &idt;

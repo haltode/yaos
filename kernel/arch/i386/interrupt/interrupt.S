@@ -441,7 +441,7 @@ irq_common_stub:
    mov %esp, %eax
 
    push %eax
-   mov irq_handler, %eax
+   mov $irq_handler, %eax
    call *%eax
    pop %eax
 
