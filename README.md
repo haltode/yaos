@@ -22,7 +22,7 @@ $ make
 # Run yaos in a virtual machine (qemu)
 # You may need to use the manual command according to your system:
 # qemu-system-YOUR_ARCH -cdrom yaos.iso
-$ make qemu
+$ make run
 ```
 
 ### What you should see
