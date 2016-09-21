@@ -2,9 +2,7 @@
 
 #include <kernel/tty.h>
 #include <kernel/gdt.h>
-#include <kernel/idt.h>
-#include <kernel/isr.h>
-#include <kernel/irq.h>
+#include <kernel/interrupts.h>
 #include <kernel/timer.h>
 
 void kernel_main(void)

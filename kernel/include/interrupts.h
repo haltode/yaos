@@ -1,5 +1,5 @@
-#ifndef _KERNEL_ISR_H
-#define _KERNEL_ISR_H
+#ifndef _KERNEL_INTERRUPTS_H
+#define _KERNEL_INTERRUPTS_H
 
 #include <stdint.h>
 
@@ -16,6 +16,15 @@ struct stack
    uint32_t eip, cs, eflags, useresp, ss;
 };
 
+/* IDT */
+void idt_install(void);
+
+/* ISR */
 void isr_install(void);
+
+/* IRQ */
+void irq_install_handler(uint8_t irq, void (*handler)(struct stack *registers));
+void irq_uninstall_handler(uint8_t irq);
+void irq_install(void);
 
 #endif

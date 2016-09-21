@@ -1,8 +1,6 @@
 #include <stdio.h>
 
-#include <kernel/isr.h>
-
-#include "idt.h"
+#include <kernel/interrupts.h>
 
 /* ISR (Interrupt Service Routines) */
 extern void isr0();

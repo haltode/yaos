@@ -1,7 +1,6 @@
 #include <stdint.h>
 
-#include <kernel/isr.h>
-#include <kernel/irq.h>
+#include <kernel/interrupts.h>
 
 uint32_t timer_ticks = 0;
 
