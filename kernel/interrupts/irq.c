@@ -3,9 +3,6 @@
 #include <kernel/interrupts.h>
 #include <kernel/io.h>
 
-extern void outb(uint32_t port, uint8_t val);
-extern uint8_t inb(uint32_t port);
-
 #define NB_IRQ_ROUTINES 16
 
 /* IRQ (Interrupt Requests) */
@@ -54,16 +51,16 @@ void irq_uninstall_handler(uint8_t irq)
    remapped to IDT entries 32 to 47 */
 void irq_remap(void)
 {
-   outb(0x20, 0x11);
-   outb(0xA0, 0x11);
-   outb(0x21, 0x20);
-   outb(0xA1, 0x28);
-   outb(0x21, 0x04);
-   outb(0xA1, 0x02);
-   outb(0x21, 0x01);
-   outb(0xA1, 0x01);
-   outb(0x21, 0x00);
-   outb(0xA1, 0x00);
+   write_port(0x20, 0x11);
+   write_port(0xA0, 0x11);
+   write_port(0x21, 0x20);
+   write_port(0xA1, 0x28);
+   write_port(0x21, 0x04);
+   write_port(0xA1, 0x02);
+   write_port(0x21, 0x01);
+   write_port(0xA1, 0x01);
+   write_port(0x21, 0x00);
+   write_port(0xA1, 0x00);
 }
 
 void irq_install(void)
@@ -88,6 +85,9 @@ void irq_install(void)
    idt_set_entry(45, (uint32_t)irq13, 0x08, 0x8E);
    idt_set_entry(46, (uint32_t)irq14, 0x08, 0x8E);
    idt_set_entry(47, (uint32_t)irq15, 0x08, 0x8E);
+
+   /* Now we can allow IRQs to happen */
+   __asm__ __volatile__ ("sti");
 }
 
 /* Each of the IRQ ISRs point to this function, rather than
@@ -114,9 +114,9 @@ void irq_handler(struct stack *registers)
       (meaning IRQ8 - IRQ15), then we need to send an EOI to
       the slave controller */
    if(registers->id >= 40)
-      outb(0xA0, 0x20);
+      write_port(0xA0, 0x20);
 
    /* In either case, we need to send an EOI to the master
       interrupt controller too */
-   outb(0x20, 0x20);
+   write_port(0x20, 0x20);
 }
