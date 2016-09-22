@@ -17,6 +17,7 @@ struct stack
 };
 
 /* IDT */
+void idt_set_entry(uint8_t num, uint32_t base, uint16_t selector, uint8_t flags);
 void idt_install(void);
 
 /* ISR */
