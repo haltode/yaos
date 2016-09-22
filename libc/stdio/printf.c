@@ -1,14 +1,9 @@
-#include <limits.h>
 #include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-
-#if defined(__is_libk)
-#include <kernel/tty.h>
-#endif
 
 static bool print(const char* data, size_t length)
 {
@@ -90,15 +85,7 @@ int printf(const char* restrict format, ...)
             ++written;
          }
       }
-      /* Escape sequences (newline) */
-      else if(format[i] == '\n') {
-         #if defined(__is_libk)
-            terminal_newline();
-            ++written;
-         #else
-         #endif
-      }
-      /* Normal character */
+      /* Normal character (letter, escape sequence, etc.) */
       else {
          char c = format[i];
          if(!print(&c, sizeof(c))) 
