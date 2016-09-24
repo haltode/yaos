@@ -48,6 +48,11 @@ Here are a few resources that helped me create the kernel.
 - [Bran's Kernel Development - The Keyboard](http://www.osdever.net/bkerndev/Docs/keyboard.htm)
 - [OSDev.org - Keyboard](http://wiki.osdev.org/Keyboard)
 
+### TTY
+
+- [OSDev.org - Meaty Skeleton](http://wiki.osdev.org/Meaty_Skeleton)
+- [OSDev.org - Text Mode Cursor](http://wiki.osdev.org/Text_Mode_Cursor)
+
 ### Miscellaneous
 
 - [OSDev.org - Inline Assembly/Examples](http://wiki.osdev.org/Inline_Assembly/Examples)
