@@ -5,6 +5,10 @@
 
 #include <kernel/tty.h>
 #include <kernel/vga.h>
+#include <kernel/io.h>
+
+#define VGA_CMD   0x3D4
+#define VGA_DATA  0x3D5
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -30,12 +34,22 @@ void terminal_initialize(void)
    }
 }
 
-void terminal_setcolor(uint8_t color)
+static void terminal_setcolor(uint8_t color)
 {
    terminal_color = color;
 }
 
-void terminal_newline(void)
+static void terminal_movecursor(size_t x, size_t y)
+{
+   const size_t index = y * VGA_WIDTH + x;
+
+   write_port(VGA_CMD, 0x0F);
+   write_port(VGA_DATA, (uint8_t) index);
+   write_port(VGA_CMD, 0x0E);
+   write_port(VGA_DATA, (uint8_t) (index >> 8));
+}
+
+static void terminal_newline(void)
 {
    terminal_column = 0;
    ++terminal_row;
@@ -54,10 +68,19 @@ void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y)
 void terminal_putchar(char c)
 {
    unsigned char uc = c;
-   terminal_putentryat(uc, terminal_color, terminal_column, terminal_row);
-   ++terminal_column;
-   if(terminal_column == VGA_WIDTH)
+
+   /* Escape sequence (newline) */
+   if(c == '\n')
       terminal_newline();
+   /* Other character */
+   else {
+      terminal_putentryat(uc, terminal_color, terminal_column, terminal_row);
+      ++terminal_column;
+      if(terminal_column == VGA_WIDTH)
+         terminal_newline();
+   }
+
+   terminal_movecursor(terminal_column, terminal_row);
 }
 
 void terminal_write(const char* data, size_t size)
