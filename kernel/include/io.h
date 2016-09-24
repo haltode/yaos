@@ -17,4 +17,12 @@ inline uint8_t read_port(uint32_t port)
    return val;
 }
 
+inline void io_wait(void)
+{
+   /* TODO: This is probably fragile. */
+   asm volatile ( "jmp 1f\n\t"
+                  "1:jmp 2f\n\t"
+                  "2:" );
+}
+
 #endif

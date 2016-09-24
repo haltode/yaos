@@ -5,6 +5,21 @@
 
 #define NB_IRQ_ROUTINES 16
 
+#define PIC1         0x20 /* master PIC */
+#define PIC2         0xA0 /* slave PIC */
+#define PIC1_CMD     PIC1
+#define PIC1_DATA    (PIC1 + 1)
+#define PIC2_CMD     PIC2
+#define PIC2_DATA    (PIC2 + 1)
+#define PIC1_OFFSET  0x20
+#define PIC2_OFFSET  0x28
+
+#define PIC_EOI 0x20
+
+#define ICW1_ICW4 0x01
+#define ICW1_INIT 0x10
+#define ICW4_8086 0x01
+
 /* IRQ (Interrupt Requests) */
 extern void irq0();
 extern void irq1();
@@ -51,16 +66,29 @@ void irq_uninstall_handler(uint8_t irq)
    remapped to IDT entries 32 to 47 */
 void irq_remap(void)
 {
-   write_port(0x20, 0x11);
-   write_port(0xA0, 0x11);
-   write_port(0x21, 0x20);
-   write_port(0xA1, 0x28);
-   write_port(0x21, 0x04);
-   write_port(0xA1, 0x02);
-   write_port(0x21, 0x01);
-   write_port(0xA1, 0x01);
-   write_port(0x21, 0x00);
-   write_port(0xA1, 0x00);
+   /* Cascade initialization */
+   write_port(PIC1_CMD, ICW1_INIT | ICW1_ICW4);
+   io_wait();
+   write_port(PIC2_CMD, ICW1_INIT | ICW1_ICW4);
+   io_wait();
+   
+   /* Actual remap */
+   write_port(PIC1_DATA, PIC1_OFFSET);
+   io_wait();
+   write_port(PIC2_DATA, PIC2_OFFSET);
+   io_wait();
+
+   /* Cascade identity */
+   write_port(PIC1_DATA, 0x04);
+   io_wait();
+   write_port(PIC2_DATA, 0x02);
+   io_wait();
+
+   /* 8086 mode */
+   write_port(PIC1_DATA, ICW4_8086);
+   io_wait();
+   write_port(PIC2_DATA, ICW4_8086);
+   io_wait();
 }
 
 void irq_install(void)
@@ -114,9 +142,9 @@ void irq_handler(struct stack *registers)
       (meaning IRQ8 - IRQ15), then we need to send an EOI to
       the slave controller */
    if(registers->id >= 40)
-      write_port(0xA0, 0x20);
+      write_port(PIC2_CMD, PIC_EOI);
 
    /* In either case, we need to send an EOI to the master
       interrupt controller too */
-   write_port(0x20, 0x20);
+   write_port(PIC1_CMD, PIC_EOI);
 }

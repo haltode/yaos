@@ -25,6 +25,14 @@ void timer_phase(const uint32_t hz)
 {
    uint32_t divisor = 1193180 / hz;
 
+   /* Bit definitions for command register
+
+      0: BCD
+      1-3: Mode
+      4-5: RW (read/write)
+      6-7: CNTR (counter)
+
+   */
    write_port(COMMAND_REG, 0x36);
    /* Set the low byte of 'divisor' */
    write_port(DATA_REG1, divisor & 0xFF);
