@@ -47,6 +47,8 @@ Here are a few resources that helped me create the kernel.
 
 - [Bran's Kernel Development - The Keyboard](http://www.osdever.net/bkerndev/Docs/keyboard.htm)
 - [OSDev.org - Keyboard](http://wiki.osdev.org/Keyboard)
+- [OSDev.org - "8042" PS/2 Controller](http://wiki.osdev.org/%228042%22_PS/2_Controller)
+- *(French)* [Gérer les interruptions du clavier](http://a.michelizza.free.fr/pmwiki.php?n=TutoOS.Kbd)
 
 ### TTY
 

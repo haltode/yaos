@@ -35,6 +35,7 @@ TODO: insert images
 - [Bran's Kernel Development Tutorial](http://www.osdever.net/bkerndev/index.php)
 - [How to Make a Computer Operating System](https://www.gitbook.com/book/samypesse/how-to-create-an-operating-system/details)
 - [ToaruOS](http://toaruos.org/)
+- *(French)* [Programmer son propre noyau](http://a.michelizza.free.fr/pmwiki.php?n=TutoOS.TutoOS)
 
 ## License
 
