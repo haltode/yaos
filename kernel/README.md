@@ -21,6 +21,7 @@ Here are a few resources that helped me create the kernel.
 ### Interrupts
 
 - [OSDev.org - Interrupts](http://wiki.osdev.org/Interrupts)
+- [OSDev.org - I Can't Get Interrupts Working](http://wiki.osdev.org/I_Can't_Get_Interrupts_Working)
 
 - IDT (Interrupt Descriptor Table)
 
@@ -35,6 +36,21 @@ Here are a few resources that helped me create the kernel.
 - IRQ (Interrupt Request)
 
    - [Bran's Kernel Development - IRQs and PICs](http://www.osdever.net/bkerndev/Docs/irqs.htm)
+   - [OSDev.org - PIC](http://wiki.osdev.org/PIC)
+
+### System Clock
+
+- [Bran's Kernel Development - The PIT: A System Clock](http://www.osdever.net/bkerndev/Docs/pit.htm)
+- [OSDev.org - Programmable Interval Timer](http://wiki.osdev.org/PIT)
+
+### Keyboard
+
+- [Bran's Kernel Development - The Keyboard](http://www.osdever.net/bkerndev/Docs/keyboard.htm)
+- [OSDev.org - Keyboard](http://wiki.osdev.org/Keyboard)
+
+### Miscellaneous
+
+- [OSDev.org - Inline Assembly/Examples](http://wiki.osdev.org/Inline_Assembly/Examples)
 
 ## License
 
