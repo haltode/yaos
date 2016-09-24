@@ -4,6 +4,7 @@
 #include <kernel/gdt.h>
 #include <kernel/interrupts.h>
 #include <kernel/timer.h>
+#include <kernel/keyboard.h>
 
 void kernel_main(void)
 {
@@ -19,10 +20,18 @@ void kernel_main(void)
    puts("(kernel) ISR loaded.");
    irq_install();
    puts("(kernel) IRQ loaded.");
-   
+
    timer_install();
    puts("(kernel) Timer loaded.");
 
+   keyboard_install();
+   puts("(kernel) Keyboard loaded.");
+
    puts("");
    puts("Hello kernel World!");
+
+   /* Make sure the main function doesn't exit prematurely 
+      (Otherwise it disables interrupts) */
+   for(;;)
+      asm("hlt");
 }
