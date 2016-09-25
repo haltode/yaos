@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <kernel/tty.h>
 #include <kernel/vga.h>
 #include <kernel/io.h>
 
@@ -19,6 +18,11 @@ static uint8_t terminal_column;
 static uint8_t terminal_color;
 static uint16_t* terminal_buffer;
 
+static uint16_t terminal_pos(uint8_t x, uint8_t y)
+{
+   return y * VGA_WIDTH + x;
+}
+
 void terminal_initialize(void)
 {
    terminal_row = 0;
@@ -28,20 +32,15 @@ void terminal_initialize(void)
 
    for(size_t y = 0; y < VGA_HEIGHT; ++y) {
       for(size_t x = 0; x < VGA_WIDTH; ++x) {
-         const uint16_t index = y * VGA_WIDTH + x;
-         terminal_buffer[index] = vga_entry(' ', terminal_color);
+         uint16_t index = terminal_pos(x, y);
+         terminal_buffer[index] = vga_entry(0, terminal_color);
       }
    }
 }
 
-static void terminal_setcolor(uint8_t color)
-{
-   terminal_color = color;
-}
-
 static void terminal_movecursor(uint8_t x, uint8_t y)
 {
-   const uint16_t index = y * VGA_WIDTH + x;
+   uint16_t index = terminal_pos(x, y);
 
    write_port(VGA_CMD, 0x0F);
    write_port(VGA_DATA, (uint8_t) index);
@@ -49,32 +48,89 @@ static void terminal_movecursor(uint8_t x, uint8_t y)
    write_port(VGA_DATA, (uint8_t) (index >> 8));
 }
 
+void terminal_scrollup(uint8_t nb_rows)
+{
+   /* Shift each rows by nb_rows */
+   for(size_t y = 0; y < VGA_HEIGHT; ++y) {
+      uint8_t new_y = y + nb_rows;
+      if(new_y < VGA_HEIGHT) {
+         for(size_t x = 0; x < VGA_WIDTH; ++x) {
+            uint16_t index = terminal_pos(x, y);
+            uint16_t new_index = terminal_pos(x, new_y);
+            terminal_buffer[index] = terminal_buffer[new_index];
+         }
+      }
+      /* No more rows to shift so we use empty rows */
+      else {
+         for(size_t x = 0; x < VGA_WIDTH; ++x) {
+            uint16_t index = terminal_pos(x, y);
+            terminal_buffer[index] = vga_entry(0, terminal_color);
+         }
+      }
+   }
+
+   /* Update cursor */
+   if(nb_rows > terminal_row)
+      terminal_row = 0;
+   else
+      terminal_row -= nb_rows;
+   terminal_movecursor(terminal_column, terminal_row);
+}
+
 static void terminal_newline(void)
 {
    terminal_column = 0;
    ++terminal_row;
-   if(terminal_row == VGA_HEIGHT) {
-      /* TODO: implement scrolling/clearing the screen */
-      terminal_row = 0;
-   }
+   if(terminal_row == VGA_HEIGHT)
+      terminal_scrollup(1);
 }
 
-void terminal_putentryat(unsigned char c, uint8_t color, uint8_t x, uint8_t y)
+static void terminal_backspace(void)
 {
-   const uint16_t index = y * VGA_WIDTH + x;
-   terminal_buffer[index] = vga_entry(c, color);
+   if(terminal_column == 0) {
+      terminal_column = VGA_WIDTH - 1;
+      if(terminal_row == 0)
+         terminal_column = 0;
+      else
+         --terminal_row;
+
+      /* Go to the last character on the line */
+      uint16_t empty = vga_entry(0, terminal_color);
+      uint16_t index = terminal_pos(terminal_column, terminal_row);
+      while(terminal_column > 0 && terminal_buffer[index] == empty) {
+         --terminal_column;
+         index = terminal_pos(terminal_column, terminal_row);
+      }
+      /* Don't erase the last character immediately */
+      if(terminal_buffer[index] != empty && terminal_column + 1 < VGA_WIDTH)
+         ++terminal_column;
+   }
+   else
+      --terminal_column;
+
+   uint16_t index = terminal_pos(terminal_column, terminal_row);
+   terminal_buffer[index] = vga_entry(0, terminal_color);
+}
+
+void terminal_putentryat(unsigned char c, uint8_t x, uint8_t y)
+{
+   uint16_t index = terminal_pos(x, y);
+   terminal_buffer[index] = vga_entry(c, terminal_color);
 }
 
 void terminal_putchar(char c)
 {
    unsigned char uc = c;
 
-   /* Escape sequence (newline) */
-   if(c == '\n')
+   /* Newline */
+   if(uc == '\n')
       terminal_newline();
+   /* Backspace */
+   else if(uc == '\b')
+      terminal_backspace();
    /* Other character */
    else {
-      terminal_putentryat(uc, terminal_color, terminal_column, terminal_row);
+      terminal_putentryat(uc, terminal_column, terminal_row);
       ++terminal_column;
       if(terminal_column == VGA_WIDTH)
          terminal_newline();
