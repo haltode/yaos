@@ -21,7 +21,7 @@ void timer_handler(struct stack *registers)
    ++timer_ticks;
 }
 
-void timer_phase(const uint32_t hz)
+static void timer_phase(const uint32_t hz)
 {
    uint32_t divisor = 1193180 / hz;
 

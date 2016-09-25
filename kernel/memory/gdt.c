@@ -51,7 +51,7 @@ struct gdt_ptr gdt_ptr;
 extern void gdt_flush();
 
 
-void gdt_set_entry(uint8_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
+static void gdt_set_entry(uint8_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
 {
    gdt[num].base_low = base & 0xFFFF;
    gdt[num].base_middle = (base >> 16) & 0xFF;

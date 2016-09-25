@@ -48,7 +48,7 @@ static void terminal_movecursor(uint8_t x, uint8_t y)
    write_port(VGA_DATA, (uint8_t) (index >> 8));
 }
 
-void terminal_scrollup(uint8_t nb_rows)
+static void terminal_scrollup(uint8_t nb_rows)
 {
    /* Shift each rows by nb_rows */
    for(size_t y = 0; y < VGA_HEIGHT; ++y) {
@@ -112,7 +112,7 @@ static void terminal_backspace(void)
    terminal_buffer[index] = vga_entry(0, terminal_color);
 }
 
-void terminal_putentryat(unsigned char c, uint8_t x, uint8_t y)
+static void terminal_putentryat(unsigned char c, uint8_t x, uint8_t y)
 {
    uint16_t index = terminal_pos(x, y);
    terminal_buffer[index] = vga_entry(c, terminal_color);

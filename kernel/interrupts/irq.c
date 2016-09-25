@@ -64,7 +64,7 @@ void irq_uninstall_handler(uint8_t irq)
    We send commands to the Programmable Interrupt Controller 
    (PICs - also called the 8259's) in order to make IRQ0 to 15 be
    remapped to IDT entries 32 to 47 */
-void irq_remap(void)
+static void irq_remap(void)
 {
    /* Cascade initialization */
    write_port(PIC1_CMD, ICW1_INIT | ICW1_ICW4);
