@@ -18,6 +18,15 @@ Here are a few resources that helped me create the kernel.
    - [OSDev.org - GDT Tutorial](http://wiki.osdev.org/GDT_Tutorial)
    - [Bran's Kernel Development - The GDT](http://www.osdever.net/bkerndev/Docs/gdt.htm)
 
+- Paging
+
+   - [OSDev.org - Memory Management](http://wiki.osdev.org/Memory_Management)
+   - [OSDev.org - Paging](http://wiki.osdev.org/Paging)
+   - [x86 Paging Tutorial](http://www.cirosantilli.com/x86-paging/)
+   - *(French)* [Gérer la mémoire - un noyau qui implémente la pagination](http://a.michelizza.free.fr/pmwiki.php?n=TutoOS.Mm)
+   - [How to make an OS - Theory: physical and virtual memory](https://samypesse.gitbooks.io/how-to-create-an-operating-system/content/Chapter-8/)
+   - [OSDev.org - Setting Up Paging](http://wiki.osdev.org/Setting_Up_Paging)
+
 ### Interrupts
 
 - [OSDev.org - Interrupts](http://wiki.osdev.org/Interrupts)
