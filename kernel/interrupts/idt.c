@@ -13,9 +13,9 @@
 40-47: Flags (Type/Attributes)
 
    0-3: Gate type
-   4: S (Storage segment)
-   5-6: DPL (Descriptor Privilege Level)
-   7: P (Present)
+   4: Storage segment
+   5-6: Descriptor Privilege Level
+   7: Present
 
 48-63: Offset
 

@@ -9,21 +9,21 @@
 32-39: Base
 40-47: Access
 
-   0: AC (Accessed bit)
-   1: RW (Readable bit/Writable bit)
-   2: DC (Direction bit/Conforming bit)
-   3: Ex (Executable bit)
+   0: Accessed bit
+   1: Readable bit/Writable bit
+   2: Direction bit/Conforming bit
+   3: Executable bit
    4: 1
-   5-6: Privl (Privilege bits)
-   7: Pr (Present bit)
+   5-6: Privilege bits
+   7: Present bit
 
 48-51: Limit
 52-55: Flags
 
    0: 0
    1: 0
-   2: Sz (Size bit)
-   3: Gr (Granularity bit)
+   2: Size bit
+   3: Granularity bit
 
 56-63: Base
 
