@@ -38,7 +38,7 @@ struct idt_ptr {
 struct idt_entry idt[NB_IDT_ENTRY];
 struct idt_ptr idt_ptr;
 
-extern void idt_load();
+extern void idt_load(void);
 
 
 void idt_set_entry(uint8_t num, uint32_t base, uint16_t selector, uint8_t flags)

@@ -48,7 +48,7 @@ struct gdt_ptr {
 struct gdt_entry gdt[NB_GDT_ENTRY];
 struct gdt_ptr gdt_ptr;
 
-extern void gdt_flush();
+extern void gdt_flush(void);
 
 
 static void gdt_set_entry(uint8_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
