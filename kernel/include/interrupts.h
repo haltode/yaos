@@ -21,6 +21,8 @@ void idt_set_entry(uint8_t num, uint32_t base, uint16_t selector, uint8_t flags)
 void idt_install(void);
 
 /* ISR */
+void isr_install_handler(uint8_t isr, void (*handler)(struct stack *registers));
+void isr_uninstall_handler(uint8_t isr);
 void isr_install(void);
 
 /* IRQ */

@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include <kernel/interrupts.h>
+
 #define NB_TABLE_ENTRY 1024
 
 /* 3 level paging scheme (4 GiB of memory)
@@ -55,6 +57,26 @@ uint32_t *page_table0;
 extern void paging_enable(void);
 
 
+void page_fault_handler(struct stack *registers)
+{
+   /* The faulting address is stored in the CR2 register */
+   uint32_t faulting_address;
+   __asm__ __volatile__ ("mov %%cr2, %0" : "=r" (faulting_address));
+
+   /* The error code gives us details of what happened */
+   uint8_t present = !(registers->err_code & 0x1);
+   uint8_t read_write = registers->err_code & 0x2;
+   uint8_t user = registers->err_code & 0x4;
+   uint8_t reserved = registers->err_code & 0x8;
+
+   printf("Page fault ( ");
+   if(present)    printf("present ");
+   if(read_write) printf("read-only ");
+   if(user)       printf("user-mode ");
+   if(reserved)   printf("reserved ");
+   printf(") at %d\n", faulting_address);
+}
+
 static void paging_setup(void)
 {
    /* Set up a simple page table as an example */
@@ -76,6 +98,8 @@ static void paging_setup(void)
 
 void paging_install(void)
 {
+   isr_install_handler(14, page_fault_handler);
+
    paging_setup();
    paging_enable();
 }

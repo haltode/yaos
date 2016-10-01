@@ -2,6 +2,8 @@
 
 #include <kernel/interrupts.h>
 
+#define NB_ISR_ROUTINES 32 
+
 /* ISR (Interrupt Service Routines) */
 extern void isr0(void);
 extern void isr1(void);
@@ -35,6 +37,27 @@ extern void isr28(void);
 extern void isr29(void);
 extern void isr30(void);
 extern void isr31(void);
+
+/* This array is actually an array of function pointers. We use 
+   this to handle custom ISR handlers for a given ISR */
+void *isr_routines[NB_ISR_ROUTINES] =
+{
+   0, 0, 0, 0, 0, 0, 0, 0,
+   0, 0, 0, 0, 0, 0, 0, 0,
+   0, 0, 0, 0, 0, 0, 0, 0,
+   0, 0, 0, 0, 0, 0, 0, 0
+};
+
+/* Install a custom ISR handler for the given ISR */
+void isr_install_handler(uint8_t isr, void (*handler)(struct stack *registers))
+{
+   isr_routines[isr] = handler;
+}
+
+void isr_uninstall_handler(uint8_t isr)
+{
+   isr_routines[isr] = 0;
+}
 
 void isr_install(void)
 {
@@ -121,8 +144,17 @@ void fault_handler(struct stack *registers)
 {
    /* We only use the first 32 ISR */
    if(registers->id < 32) {
-      puts(exception_messages[registers->id]);
       puts("Exception. System Halted!");
+
+      /* Find out if we have a custom handler to run for this ISR and run it */
+      void (*handler)(struct stack *registers);
+      handler = isr_routines[registers->id];
+      if(handler)
+         handler(registers);
+      /* If we don't, print the exception's corresponding message */
+      else
+         puts(exception_messages[registers->id]);
+
       for(;;);
    }
 }
