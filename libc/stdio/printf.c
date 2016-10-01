@@ -16,7 +16,7 @@ static bool print(const char* data, size_t length)
 
 static bool isspecifier(const char c)
 {
-   static const char* specifiers = "dcs%";
+   static const char* specifiers = "dxcs%";
    const size_t spec_len = strlen(specifiers);
 
    for(size_t i = 0; i < spec_len; ++i)
@@ -49,13 +49,25 @@ int printf(const char* restrict format, ...)
          if(format[i] == '\0')
             return -1;
 
-         /* int */
+         /* int (decimal) ) */
          if(format[i] == 'd') {
             int number = va_arg(parameters, int);
-            char str[8];
+            char str[16];
             size_t len;
 
             itoa(number, str, 10);
+            len = strlen(str);
+            if(!print(str, len))
+               return -1;
+            written += len;
+         }
+         /* int (hexadecimal) */
+         if(format[i] == 'x') {
+            unsigned int number = va_arg(parameters, unsigned int);
+            char str[16];
+            size_t len;
+
+            utoa(number, str, 16);
             len = strlen(str);
             if(!print(str, len))
                return -1;

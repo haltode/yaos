@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
 
@@ -74,7 +75,7 @@ void page_fault_handler(struct stack *registers)
    if(read_write) printf("read-only ");
    if(user)       printf("user-mode ");
    if(reserved)   printf("reserved ");
-   printf(") at %d\n", faulting_address);
+   printf(") at 0x%x\n", faulting_address);
 }
 
 static void paging_setup(void)
