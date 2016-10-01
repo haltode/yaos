@@ -8,47 +8,23 @@
 
 /* 3 level paging scheme (4 GiB of memory)
 
-   Page directory = 1024 * Page table
-   Page table = 1024 * Page
+   Page directory = 1024 * Page tables
+   Page table = 1024 * Pages
    Page = 4 KiB of memory
 
-   Linear Address :
-
-   0-11: Offset
-   12-21: Table
-   22-31: Directory
-
-*/
-
-/* Page directory entry
-
-0: Present
-1: Read/write
-2: User/supervisor
-3: Write through
-4: Cache disabled
-5: Accessed
-6: 0
-7: Page size
-8: Ignored
-9-11: Unused
-12-31: Page table address
-
-*/
-
-/* Page table entry
-
-0: Present
-1: Read/write
-2: User/supervisor
-3: Write through
-4: Cache disabled
-5: Accessed
-6: Dirty
-7: 0
-8: Global
-9-11: Unused
-12-31: Page address
+| Bits  | Page directory entry | Page table entry |
+| ----  | -------------------- | ---------------- |
+| 0     | Present              | Present          |
+| 1     | Read/write           | Read/write       |
+| 2     | User/supervisor      | User/supervisor  |
+| 3     | Write through        | Write through    |
+| 4     | Cache disabled       | Cache disabled   |
+| 5     | Accessed             | Accessed         |
+| 6     | 0                    | Dirty            |
+| 7     | Page size            | 0                |
+| 8     | Ignored              | Global           |
+| 9-11  | Unused               | Unused           |
+| 12-31 | Page table address   | Page address     |
 
 */
 
@@ -62,7 +38,7 @@ void page_fault_handler(struct stack *registers)
 {
    /* The faulting address is stored in the CR2 register */
    uint32_t faulting_address;
-   __asm__ __volatile__ ("mov %%cr2, %0" : "=r" (faulting_address));
+   __asm__ ("mov %%cr2, %0" : "=r" (faulting_address));
 
    /* The error code gives us details of what happened */
    uint8_t present = !(registers->err_code & 0x1);
@@ -99,6 +75,7 @@ static void paging_setup(void)
 
 void paging_install(void)
 {
+   /* Add a custom ISR handler for the 'Page Fault' exception */
    isr_install_handler(14, page_fault_handler);
 
    paging_setup();
