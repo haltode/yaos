@@ -60,7 +60,7 @@ void idt_install(void)
 
    /* Setup our IDT pointer */
    idt_ptr.limit = (sizeof(struct idt_entry) * NB_IDT_ENTRY) - 1;
-   idt_ptr.base = &idt;
+   idt_ptr.base = (uint32_t) &idt;
 
    /* Load our new IDT */
    idt_load();

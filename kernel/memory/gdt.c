@@ -75,7 +75,7 @@ void gdt_install(void)
 
    /* Setup our GDT pointer */
    gdt_ptr.limit = (sizeof(struct gdt_entry) * NB_GDT_ENTRY) - 1;
-   gdt_ptr.base = &gdt;
+   gdt_ptr.base = (uint32_t) &gdt;
 
    /* Flush out the old GDT and install the new one */
    gdt_flush();

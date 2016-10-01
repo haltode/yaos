@@ -59,7 +59,7 @@ static void paging_setup(void)
 {
    /* Set up a simple page table as an example */
 
-   page_directory[0] = &page_table0;
+   page_directory[0] = (uint32_t) &page_table0;
    /* 0x3 sets present and read/write bits */
    page_directory[0] |= 0x3;
    /* Set the rest of the page directory as blank entries */
