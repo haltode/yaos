@@ -30,8 +30,9 @@ LIBK_BIN = $(LIBC)/libk.a
 #############
 
 # Virtual machine
-VM       = qemu-system-x86_64
-VM_FLAGS = -cdrom
+VM             = qemu-system-x86_64
+VM_FLAGS       = -cdrom
+VM_DEBUG_FLAGS = -s -S
 
 # Cross-compiler
 HOST = i686-elf
@@ -138,6 +139,9 @@ $(LIBC)/%.libk.o: $(LIBC)/%.c
 
 run:
 	$(VM) $(VM_FLAGS) yaos.iso
+
+debug:
+	$(VM) $(VM_DEBUG_FLAGS) $(VM_FLAGS) yaos.iso
 
 ############
 # Cleaning #

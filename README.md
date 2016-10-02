@@ -36,6 +36,9 @@ TODO: insert images
 - [How to Make a Computer Operating System](https://www.gitbook.com/book/samypesse/how-to-create-an-operating-system/details)
 - [ToaruOS](http://toaruos.org/)
 - *(French)* [Programmer son propre noyau](http://a.michelizza.free.fr/pmwiki.php?n=TutoOS.TutoOS)
+- [Intel 80386 Reference Programmer's Manual](https://pdos.csail.mit.edu/6.828/2005/readings/i386/toc.htm)
+- [The little book about OS development](https://littleosbook.github.io/)
+- [osdever.net](http://www.osdever.net/tutorials/)
 
 ## License
 

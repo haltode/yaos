@@ -1,43 +1,48 @@
 /* The bootloader will look at this image and start execution at the symbol
    designated at the entry point. */
-ENTRY(_start)
+ENTRY(loader)
 
 /* Tell where the various sections of the object files will be put in the final
    kernel image. */
 SECTIONS
 {
-   /* Begin putting sections at 1 MiB, a conventional place for kernels to be
-      loaded at by the bootloader. */
+   /* This is a higher half kernel, so it will live at 3GB + 1MB in the 
+      virtual address space, which will be mapped to 1MB in the 
+      physical address space. */
+   KERNEL_VIRTUAL_OFFSET = 0xC0000000;
+
    . = 1M;
+   . += KERNEL_VIRTUAL_OFFSET;
+
+   kernel_start = .;
 
    /* First put the multiboot header, as it is required to be put very early
       early in the image or the bootloader won't recognize the file format.
       Next we'll put the .text section. */
-   .text BLOCK(4K) : ALIGN(4K)
+   .text ALIGN(4K) : AT(ADDR(.text) - KERNEL_VIRTUAL_OFFSET)
    {
       *(.multiboot)
       *(.text)
    }
 
-   /* Read-only data. */
-   .rodata BLOCK(4K) : ALIGN(4K)
+   /* Read-only data */
+   .rodata ALIGN(4K) : AT(ADDR(.rodata) - KERNEL_VIRTUAL_OFFSET)
    {
       *(.rodata)
    }
 
    /* Read-write data (initialized) */
-   .data BLOCK(4K) : ALIGN(4K)
+   .data ALIGN(4K) : AT(ADDR(.data) - KERNEL_VIRTUAL_OFFSET)
    {
       *(.data)
    }
 
    /* Read-write data (uninitialized) and stack */
-   .bss BLOCK(4K) : ALIGN(4K)
+   .bss ALIGN(4K) : AT(ADDR(.bss) - KERNEL_VIRTUAL_OFFSET)
    {
-      *(COMMON)
       *(.bss)
+      *(.stack)
    }
 
-   /* The compiler may produce other sections, put them in the proper place in
-      in this file, if you'd like to include them in the final kernel. */
+   kernel_end = .;
 }

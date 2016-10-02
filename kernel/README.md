@@ -26,6 +26,13 @@ Here are a few resources that helped me create the kernel.
    - *(French)* [Gérer la mémoire - un noyau qui implémente la pagination](http://a.michelizza.free.fr/pmwiki.php?n=TutoOS.Mm)
    - [How to make an OS - Theory: physical and virtual memory](https://samypesse.gitbooks.io/how-to-create-an-operating-system/content/Chapter-8/)
    - [OSDev.org - Setting Up Paging](http://wiki.osdev.org/Setting_Up_Paging)
+   - [Little OS Book - Paging](https://littleosbook.github.io/#paging)
+   - [Operating Systems Development - Virtual Memory](http://www.brokenthorn.com/Resources/OSDev18.html)
+
+- Higher Half Kernel
+
+   - [OSDev.org - Higher Half x86 Bare Bones](http://wiki.osdev.org/Higher_Half_x86_Bare_Bones)
+   - [OSDev.org - (Glauxosdever) Higher Half x86 Bare Bones](http://wiki.osdev.org/User:Glauxosdever/Higher_Half_x86_Bare_Bones)
 
 ### Interrupts
 
@@ -67,6 +74,7 @@ Here are a few resources that helped me create the kernel.
 ### Miscellaneous
 
 - [OSDev.org - Inline Assembly/Examples](http://wiki.osdev.org/Inline_Assembly/Examples)
+- [OSDev.org - Kernel Debugging](http://wiki.osdev.org/How_Do_I_Use_A_Debugger_With_My_OS)
 
 ## License
 
