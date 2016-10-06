@@ -33,6 +33,7 @@ Here are a few resources that helped me create the kernel.
 
    - [OSDev.org - Higher Half x86 Bare Bones](http://wiki.osdev.org/Higher_Half_x86_Bare_Bones)
    - [OSDev.org - (Glauxosdever) Higher Half x86 Bare Bones](http://wiki.osdev.org/User:Glauxosdever/Higher_Half_x86_Bare_Bones)
+   - [OSDev.org Forums - Problem with Higher Half x86 Bare Bones](http://forum.osdev.org/viewtopic.php?f=1&t=30747&p=264551)
 
 ### Interrupts
 

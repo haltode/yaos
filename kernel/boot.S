@@ -38,53 +38,73 @@ stack_top:
 
 /*
 
-#######################
-# Boot page directory #
-#######################
+######################
+# Higher half kernel #
+######################
 
 */
 
-/* Our kernel is actually loaded at 1 MiB (physical address) but is
-   mapped to 3GB (virtual address) */
-.set KERNEL_VIRTUAL_BASE, 0xC0000000  /* 3GB */
-/* Page directory index of the kernel's page table entries */
-.set KERNEL_PAGE_NUM, (KERNEL_VIRTUAL_BASE >> 22)
-
-/* Set up the boot page directory for 4MB pages */
-.section .data
-.align 4096
-.global boot_page_directory
+.section .bss, "aw", @nobits
+   .align 4096 /* 4 KiB */
 boot_page_directory:
-   /* Unused first entry */
-   .long 0x00000083
-   /* Empty pages before the kernel */
-   .fill (KERNEL_PAGE_NUM - 1), 4, 0x00000000
-   /* Kernel's virtual address */
-   .long 0x00000083
-   /* Empty pages after the kernel */
-   .fill (1024 - KERNEL_PAGE_NUM - 1), 4, 0x00000000
+   .skip 4096
+boot_page_table:
+   .skip 4096
 
+/* The first page table (we use 4 KiB pages) :
 
-/*
-
-################
-# Kernel setup #
-################
+0-255    (1 MiB): Identity mapped address
+256-1023 (3 MiB): Kernel
 
 */
+
+.section .text
+
+/* The kernel is physically located at 1 MiB but it's mapped to
+   the virtual address of 3 GiB (it's a higher half kernel) */
+.set KERNEL_VIRTUAL_BASE, 0xC0000000
 
 /* Setup function that GRUB will call first */
-.section .text
 .global loader
+.type loader, @function
 loader:
+   movl $(boot_page_directory - KERNEL_VIRTUAL_BASE), %edi
+
+   /* The first 1 MiB is identity mapped */
+   movl $(boot_page_table - KERNEL_VIRTUAL_BASE), %edx
+   /* 0x003 sets present and read/write bits */
+   orl $0x003, %edx
+   movl %edx, (%edi)
+
+   /* 768th entry in the page directory = kernel
+      768 corresponds to our kernel virtual base address */
+   movl $(boot_page_directory - KERNEL_VIRTUAL_BASE + 0xC00), %edi
+   orl $0x003, %edx
+   movl %edx, (%edi)
+
+   /* Fill in the page table */
+   movl $(boot_page_table - KERNEL_VIRTUAL_BASE), %edi
+   movl $0x0, %ecx
+
+setup_entry:
+   movl %ecx, %edx
+   /* Get the page number */
+   shll $12, %edx
+   /* 0x003 sets present and read/write bits */
+   orl $0x003, %edx
+
+   /* (%edi, %ecx, 4) = (%edi + %ecx * 4) */
+   movl %edx, (%edi, %ecx, 4)
+
+   incl %ecx
+   /* 1024 = 4 MiB (the end of the page table) */
+   cmpl $1024, %ecx
+   jne setup_entry
+
+setup_paging:
    /* Put the page directory's address in CR3 */
    movl $(boot_page_directory - KERNEL_VIRTUAL_BASE), %ecx
    movl %ecx, %cr3
-
-   /* Set the PSE bit in CR4 to enable 4MB pages */
-   movl %cr4, %ecx
-   orl $0x00000010, %ecx
-   movl %ecx, %cr4
 
    /* Set the paging enable bit in CR0 */
    movl %cr0, %ecx
@@ -95,11 +115,10 @@ loader:
    lea (start_higher_half), %ecx
    jmp *%ecx
 
-
 start_higher_half:
-   /* Unmap the first identity mapped 4MB of virtual address (we don't
-      need it anymore) */
-   movl $0x00000000, (boot_page_directory)
+   /* Unmap the first identity mapped 4MB of virtual address
+      (we don't need it anymore) */
+   movl $0x0, (boot_page_directory)
    invlpg (0)
 
    /* Set up the stack */
