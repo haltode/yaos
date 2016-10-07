@@ -22,8 +22,10 @@ void kernel_main(void)
    irq_install();
    puts("(kernel) IRQ loaded.");
 
-   /* paging_install(); */
-   /* puts("(kernel) Paging enabled."); */
+   /* Paging is already enabled because we are using a higher half
+      kernel, so we just need to set up others details about it */
+   paging_setup();
+   puts("(kernel) Paging fully set.");
 
    timer_install();
    puts("(kernel) Timer enabled.");
