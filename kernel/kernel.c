@@ -1,13 +1,14 @@
 #include <stdio.h>
 
+#include <kernel/multiboot.h>
 #include <kernel/tty.h>
 #include <kernel/gdt.h>
 #include <kernel/interrupts.h>
-#include <kernel/paging.h>
+#include <kernel/memory.h>
 #include <kernel/timer.h>
 #include <kernel/keyboard.h>
 
-void kernel_main(void)
+void kernel_main(multiboot_info_t* boot_info)
 {
    terminal_initialize();
    puts("(kernel) TTY loaded.");
@@ -22,17 +23,18 @@ void kernel_main(void)
    irq_install();
    puts("(kernel) IRQ loaded.");
 
-   /* Paging is already enabled because we are using a higher half
-      kernel, so we just need to set up others details about it */
-   paging_setup();
-   puts("(kernel) Paging fully set.");
+   phys_mem_init(boot_info);
+   puts("(kernel) Physical memory manager enabled.");
+
+   virt_mem_init();
+   puts("(kernel) Virtual memory manager enabled.");
 
    timer_install();
    puts("(kernel) Timer enabled.");
 
    keyboard_install();
    puts("(kernel) Keyboard enabled.");
-
+   
    puts("");
    puts("Hello kernel World!");
 

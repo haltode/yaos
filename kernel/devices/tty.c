@@ -11,8 +11,7 @@
 
 static const uint8_t VGA_WIDTH = 80;
 static const uint8_t VGA_HEIGHT = 25;
-/* Paging is enabled, so we have to use the kernel virtual offset (0xC0000000) */
-static uint16_t* const VGA_MEMORY = (uint16_t*) 0xC00B8000;
+static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 
 static uint8_t terminal_row;
 static uint8_t terminal_column;

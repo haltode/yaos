@@ -1,30 +1,14 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 #include <kernel/interrupts.h>
+#include <kernel/paging.h>
 
-/* 3 level paging scheme (4 GiB of memory)
-
-   Page directory = 1024 * Page tables
-   Page table = 1024 * Pages
-   Page = 4 KiB of memory
-
-| Bits  | Page directory entry | Page table entry |
-| ----  | -------------------- | ---------------- |
-| 0     | Present              | Present          |
-| 1     | Read/write           | Read/write       |
-| 2     | User/supervisor      | User/supervisor  |
-| 3     | Write through        | Write through    |
-| 4     | Cache disabled       | Cache disabled   |
-| 5     | Accessed             | Accessed         |
-| 6     | 0                    | Dirty            |
-| 7     | Page size            | 0                |
-| 8     | Ignored              | Global           |
-| 9-11  | Unused               | Unused           |
-| 12-31 | Page table address   | Page address     |
-
-*/
+/*
+ * Setup
+ */
 
 void page_fault_handler(struct stack *registers)
 {
@@ -50,4 +34,94 @@ void paging_setup(void)
 {
    /* Add a custom ISR handler for the 'Page Fault' exception */
    isr_install_handler(14, page_fault_handler);
+}
+
+/* 3 level paging scheme (4 GiB of memory)
+
+   Page directory = 1024 * Page tables
+   Page table = 1024 * Pages
+   Page = 4 KiB of memory
+
+| Bits  | Page directory entry | Page table entry |
+| ----  | -------------------- | ---------------- |
+| 0     | Present              | Present          |
+| 1     | Read/write           | Read/write       |
+| 2     | User/supervisor      | User/supervisor  |
+| 3     | Write through        | Write through    |
+| 4     | Cache disabled       | Cache disabled   |
+| 5     | Accessed             | Accessed         |
+| 6     | 0                    | Dirty            |
+| 7     | Page size            | 0                |
+| 8     | Ignored              | Global           |
+| 9-11  | Unused               | Unused           |
+| 12-31 | Page table address   | Page address     |
+
+*/
+
+/*
+ * Page directory
+ */
+
+void pd_entry_add_flags(uint32_t *pd_entry, uint32_t flags)
+{
+   *pd_entry |= flags;
+}
+
+void pd_entry_del_flags(uint32_t *pd_entry, uint32_t flags)
+{
+   *pd_entry &= ~flags;
+}
+
+void pd_entry_set_frame(uint32_t *pd_entry, uint32_t address)
+{
+   *pd_entry = (*pd_entry & ~PDE_FRAME_BIT) | address;
+}
+
+uint32_t pd_entry_get_frame(uint32_t pd_entry)
+{
+   return pd_entry & PDE_FRAME_BIT;
+}
+
+bool pd_entry_is_present(uint32_t pd_entry)
+{
+   return pd_entry & PDE_PRESENT_BIT;
+}
+
+bool pd_entry_is_writable(uint32_t pd_entry)
+{
+   return pd_entry & PDE_WRITABLE_BIT;
+}
+
+/*
+ * Page table
+ */
+
+void pt_entry_add_flags(uint32_t *pt_entry, uint32_t flags)
+{
+   *pt_entry |= flags;
+}
+
+void pt_entry_del_flags(uint32_t *pt_entry, uint32_t flags)
+{
+   *pt_entry &= ~flags;
+}
+
+void pt_entry_set_frame(uint32_t *pt_entry, uint32_t address)
+{
+   *pt_entry = (*pt_entry & ~PTE_FRAME_BIT) | address;
+}
+
+uint32_t pt_entry_get_frame(uint32_t pt_entry)
+{
+   return pt_entry & PTE_FRAME_BIT;
+}
+
+bool pt_entry_is_present(uint32_t pt_entry)
+{
+   return pt_entry & PTE_PRESENT_BIT;
+}
+
+bool pt_entry_is_writable(uint32_t pt_entry)
+{
+   return pt_entry & PTE_WRITABLE_BIT;
 }

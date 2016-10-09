@@ -6,39 +6,34 @@ ENTRY(loader)
    kernel image. */
 SECTIONS
 {
-   /* This is a higher half kernel, so it will live at 3GB + 1MB in the 
-      virtual address space, which will be mapped to 1MB in the 
-      physical address space. */
-   KERNEL_VIRTUAL_OFFSET = 0xC0000000;
-
+   /* The kernel is situated at 1 MiB */
    . = 1M;
-   . += KERNEL_VIRTUAL_OFFSET;
 
    kernel_start = .;
 
    /* First put the multiboot header, as it is required to be put very early
       early in the image or the bootloader won't recognize the file format.
       Next we'll put the .text section. */
-   .text ALIGN(4K) : AT(ADDR(.text) - KERNEL_VIRTUAL_OFFSET)
+   .text BLOCK(4K) : ALIGN(4K)
    {
       *(.multiboot)
       *(.text)
    }
 
    /* Read-only data */
-   .rodata ALIGN(4K) : AT(ADDR(.rodata) - KERNEL_VIRTUAL_OFFSET)
+   .rodata BLOCK(4K) : ALIGN(4K)
    {
       *(.rodata)
    }
 
    /* Read-write data (initialized) */
-   .data ALIGN(4K) : AT(ADDR(.data) - KERNEL_VIRTUAL_OFFSET)
+   .data BLOCK(4K) : ALIGN(4K)
    {
       *(.data)
    }
 
    /* Read-write data (uninitialized) and stack */
-   .bss ALIGN(4K) : AT(ADDR(.bss) - KERNEL_VIRTUAL_OFFSET)
+   .bss BLOCK(4K) : ALIGN(4K)
    {
       *(.bss)
       *(.stack)
