@@ -27,7 +27,18 @@ Here are a few resources that helped me create the kernel.
    - [How to make an OS - Theory: physical and virtual memory](https://samypesse.gitbooks.io/how-to-create-an-operating-system/content/Chapter-8/)
    - [OSDev.org - Setting Up Paging](http://wiki.osdev.org/Setting_Up_Paging)
    - [Little OS Book - Paging](https://littleosbook.github.io/#paging)
+
+- Physical memory
+
+   - [Operating Systems Development - Physical Memory](http://www.brokenthorn.com/Resources/OSDev17.html)
+   - [osdever.net - Memory Management 1](http://www.osdever.net/tutorials/view/memory-management-1)
+   - [OSDev.org - Detecting Memory](http://wiki.osdev.org/Detecting_Memory_(x86))
+
+- Virtual memory
+
    - [Operating Systems Development - Virtual Memory](http://www.brokenthorn.com/Resources/OSDev18.html)
+   - [osdever.net - Memory Management 2](http://www.osdever.net/tutorials/view/memory-management-2)
+
 
 - Higher Half Kernel
 
