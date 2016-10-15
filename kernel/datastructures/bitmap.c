@@ -1,6 +1,6 @@
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <string.h>
 
 #include <kernel/bitmap.h>
@@ -10,22 +10,22 @@
  * where each bit corresponds to a frame (4 KiB).
  */
 
-void set_bit(bitmap_t *bitmap, uint32_t bit)
+void set_bit(Bitmap *bitmap, uint32_t bit)
 {
    bitmap->address[bit / 32] |= (1 << (bit % 32));
 }
 
-void clear_bit(bitmap_t *bitmap, uint32_t bit)
+void clear_bit(Bitmap *bitmap, uint32_t bit)
 {
    bitmap->address[bit / 32] &= ~ (1 << (bit % 32));
 }
 
-bool test_bit(bitmap_t *bitmap, uint32_t bit)
+bool test_bit(Bitmap *bitmap, uint32_t bit)
 {
    return bitmap->address[bit / 32] & (1 << (bit % 32));
 }
 
-uint32_t find_first_n_free(bitmap_t *bitmap, size_t n)
+uint32_t find_first_n_free(Bitmap *bitmap, size_t n)
 {
    if(!n)
       return 0;
@@ -57,7 +57,7 @@ uint32_t find_first_n_free(bitmap_t *bitmap, size_t n)
    return 0;
 }
 
-void set_all_bits(bitmap_t *bitmap)
+void set_all_bits(Bitmap *bitmap)
 {
    memset(bitmap->address, 0xFFFFFFFF, bitmap->size);
 }

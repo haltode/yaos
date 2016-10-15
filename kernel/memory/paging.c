@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
 
 #include <kernel/interrupts.h>
 #include <kernel/paging.h>
@@ -10,11 +10,11 @@
  * Setup
  */
 
-void page_fault_handler(struct stack *registers)
+void page_fault_handler(Stack *registers)
 {
    /* The faulting address is stored in the CR2 register */
    uint32_t faulting_address;
-   __asm__ ("mov %%cr2, %0" : "=r" (faulting_address));
+   asm ("mov %%cr2, %0" : "=r" (faulting_address));
 
    /* The error code gives us details of what happened */
    uint8_t present = !(registers->err_code & 0x1);

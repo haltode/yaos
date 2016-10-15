@@ -21,7 +21,8 @@
 
 */
 
-struct idt_entry {
+typedef struct idt_entry_t Idt_entry;
+struct idt_entry_t {
    uint16_t offset_low;
    uint16_t selector;
    uint8_t unused;
@@ -29,14 +30,15 @@ struct idt_entry {
    uint16_t offset_high;
 } __attribute__((packed));
 
-struct idt_ptr {
+typedef struct idt_ptr_t Idt_ptr;
+struct idt_ptr_t {
    uint16_t limit;
    uint32_t base;
 } __attribute__((packed));
 
 
-struct idt_entry idt[NB_IDT_ENTRY];
-struct idt_ptr idt_ptr;
+Idt_entry idt[NB_IDT_ENTRY];
+Idt_ptr idt_ptr;
 
 extern void idt_load(void);
 
@@ -56,10 +58,10 @@ void idt_set_entry(uint8_t num, uint32_t base, uint16_t selector, uint8_t flags)
 void idt_install(void)
 {
    /* Clear out the entire IDT, initializing it to zeros */
-   memset(&idt, 0, sizeof(struct idt_entry) * NB_IDT_ENTRY);
+   memset(&idt, 0, sizeof(Idt_entry) * NB_IDT_ENTRY);
 
    /* Setup our IDT pointer */
-   idt_ptr.limit = (sizeof(struct idt_entry) * NB_IDT_ENTRY) - 1;
+   idt_ptr.limit = (sizeof(Idt_entry) * NB_IDT_ENTRY) - 1;
    idt_ptr.base = (uint32_t) &idt;
 
    /* Load our new IDT */

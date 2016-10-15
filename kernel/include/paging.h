@@ -1,8 +1,8 @@
 #ifndef _KERNEL_PAGING_H
 #define _KERNEL_PAGING_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #define PDE_PRESENT_BIT       0x1
 #define PDE_WRITABLE_BIT      0x2
@@ -18,12 +18,18 @@
 /* 4 KiB */
 #define PAGE_SIZE 4096
 
+/*
+ * Paging
+ */
 
 void paging_setup(void);
 
-/* Page directory */
+/*
+ * Page directory
+ */
 
-struct page_dir {
+typedef struct page_dir_t Page_dir;
+struct page_dir_t {
    uint32_t entry[ENTRY_PER_DIR];
 };
 
@@ -34,9 +40,12 @@ uint32_t pd_entry_get_frame(uint32_t pd_entry);
 bool pd_entry_is_present(uint32_t pd_entry);
 bool pd_entry_is_writable(uint32_t pd_entry);
 
-/* Page table */
+/*
+ * Page table
+ */
 
-struct page_table {
+typedef struct page_table_t Page_table;
+struct page_table_t {
    uint32_t entry[ENTRY_PER_TABLE];
 };
 

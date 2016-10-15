@@ -3,20 +3,20 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <kernel/vga.h>
 #include <kernel/io.h>
+#include <kernel/vga.h>
 
 #define VGA_CMD   0x3D4
 #define VGA_DATA  0x3D5
 
 static const uint8_t VGA_WIDTH = 80;
 static const uint8_t VGA_HEIGHT = 25;
-static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
+static uint16_t* const VGA_MEMORY = (uint16_t *) 0xB8000;
 
 static uint8_t terminal_row;
 static uint8_t terminal_column;
 static uint8_t terminal_color;
-static uint16_t* terminal_buffer;
+static uint16_t *terminal_buffer;
 
 static uint16_t terminal_pos(uint8_t x, uint8_t y)
 {
@@ -139,13 +139,13 @@ void terminal_putchar(char c)
    terminal_movecursor(terminal_column, terminal_row);
 }
 
-void terminal_write(const char* data, size_t length)
+void terminal_write(const char *data, size_t length)
 {
    for(size_t i = 0; i < length; ++i)
       terminal_putchar(data[i]);
 }
 
-void terminal_writestring(const char* data)
+void terminal_writestring(const char *data)
 {
    terminal_write(data, strlen(data));
 }

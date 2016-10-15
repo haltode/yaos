@@ -1,14 +1,14 @@
 #include <stdio.h>
 
-#include <kernel/multiboot.h>
-#include <kernel/tty.h>
 #include <kernel/gdt.h>
 #include <kernel/interrupts.h>
-#include <kernel/memory.h>
-#include <kernel/timer.h>
 #include <kernel/keyboard.h>
+#include <kernel/memory.h>
+#include <kernel/multiboot.h>
+#include <kernel/timer.h>
+#include <kernel/tty.h>
 
-void kernel_main(multiboot_info_t* boot_info)
+void kernel_main(Multiboot_info *boot_info)
 {
    terminal_initialize();
    puts("(kernel) TTY loaded.");

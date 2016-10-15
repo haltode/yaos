@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 
 #include <kernel/interrupts.h>
 #include <kernel/io.h>
@@ -114,8 +114,12 @@ unsigned char us_layout[] = {
    0xFF, 0xFF, 0xFF, 0xFF  /* (0x61) */
 };
 
-void keyboard_handler(struct stack *registers)
+void keyboard_handler(Stack *registers)
 {
+   /* We don't use the stack structure in this function,
+      so we do this to avoid a warning when compiling */
+   (void)(registers);
+
    uint8_t scancode;
    uint16_t index;
    static uint8_t offset = 0;

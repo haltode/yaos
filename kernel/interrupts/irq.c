@@ -47,7 +47,7 @@ void *irq_routines[NB_IRQ_ROUTINES] =
 };
 
 /* Install a custom IRQ handler for the given IRQ */
-void irq_install_handler(uint8_t irq, void (*handler)(struct stack *registers))
+void irq_install_handler(uint8_t irq, void (*handler)(Stack *registers))
 {
    irq_routines[irq] = handler;
 }
@@ -115,7 +115,7 @@ void irq_install(void)
    idt_set_entry(47, (uint32_t)irq15, 0x08, 0x8E);
 
    /* Now we can allow IRQs to happen */
-   __asm__ __volatile__ ("sti");
+   asm volatile ("sti");
 }
 
 /* Each of the IRQ ISRs point to this function, rather than
@@ -128,10 +128,10 @@ void irq_install(void)
    interrupt at BOTH controllers, otherwise, you only send
    an EOI command to the first controller. If you don't send
    an EOI, you won't raise any more IRQs */
-void irq_handler(struct stack *registers)
+void irq_handler(Stack *registers)
 {
    /* This is a blank function pointer */
-   void (*handler)(struct stack *registers);
+   void (*handler)(Stack *registers);
 
    /* Find out if we have a custom handler to run for this IRQ and run it */
    handler = irq_routines[registers->id - 32];

@@ -49,7 +49,7 @@ void *isr_routines[NB_ISR_ROUTINES] =
 };
 
 /* Install a custom ISR handler for the given ISR */
-void isr_install_handler(uint8_t isr, void (*handler)(struct stack *registers))
+void isr_install_handler(uint8_t isr, void (*handler)(Stack *registers))
 {
    isr_routines[isr] = handler;
 }
@@ -140,14 +140,14 @@ static const char *exception_messages[] =
 /*  All ISRs disable interrupts while they are being serviced as a 'locking'
     mechanism to prevent an IRQ from happening and messing up kernel data
     structures */
-void fault_handler(struct stack *registers)
+void fault_handler(Stack *registers)
 {
    /* We only use the first 32 ISR */
    if(registers->id < 32) {
       puts("Exception. System Halted!");
 
       /* Find out if we have a custom handler to run for this ISR and run it */
-      void (*handler)(struct stack *registers);
+      void (*handler)(Stack *registers);
       handler = isr_routines[registers->id];
       if(handler)
          handler(registers);

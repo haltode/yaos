@@ -4,7 +4,8 @@
 #include <stdint.h>
 
 /* This defines what the stack looks like after an ISR was running */
-struct stack
+typedef struct stack_t Stack;
+struct stack_t
 {
    /* Pushed the segs last */
    uint32_t gs, fs, es, ds;
@@ -16,17 +17,26 @@ struct stack
    uint32_t eip, cs, eflags, useresp, ss;
 };
 
-/* IDT */
+/*
+ * IDT
+ */
+
 void idt_set_entry(uint8_t num, uint32_t base, uint16_t selector, uint8_t flags);
 void idt_install(void);
 
-/* ISR */
-void isr_install_handler(uint8_t isr, void (*handler)(struct stack *registers));
+/*
+ * ISR
+ */
+
+void isr_install_handler(uint8_t isr, void (*handler)(Stack *registers));
 void isr_uninstall_handler(uint8_t isr);
 void isr_install(void);
 
-/* IRQ */
-void irq_install_handler(uint8_t irq, void (*handler)(struct stack *registers));
+/*
+ * IRQ
+ */
+
+void irq_install_handler(uint8_t irq, void (*handler)(Stack *registers));
 void irq_uninstall_handler(uint8_t irq);
 void irq_install(void);
 

@@ -3,10 +3,10 @@
 #include <kernel/interrupts.h>
 #include <kernel/io.h>
 
-#define COMMAND_REG 0x43
-#define DATA_REG1 0x40
+#define COMMAND_REG  0x43
+#define DATA_REG1    0x40
 
-/* We need to use the 'volatile' keyword to stop
+/* We need to use the 'volatile' keyword to prevent
    the compiler from optimizing the variable */
 volatile uint32_t timer_ticks = 0;
 
@@ -16,8 +16,12 @@ void timer_wait(const uint32_t ticks)
    while(timer_ticks < total_ticks);
 }
 
-void timer_handler(struct stack *registers)
+void timer_handler(Stack *registers)
 {
+   /* We don't use the stack structure in this function,
+      so we do this to avoid a warning when compiling */
+   (void)(registers);
+
    ++timer_ticks;
 }
 

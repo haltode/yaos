@@ -29,7 +29,8 @@
 
 */
 
-struct gdt_entry {
+typedef struct gdt_entry_t Gdt_entry;
+struct gdt_entry_t {
    uint16_t limit_low;
    uint16_t base_low;
    uint8_t base_middle;
@@ -39,14 +40,15 @@ struct gdt_entry {
    uint8_t base_high;
 } __attribute__((packed));
 
-struct gdt_ptr {
+typedef struct gdt_ptr_t Gdt_ptr;
+struct gdt_ptr_t {
    uint16_t limit;
    uint32_t base;
 } __attribute__((packed));
 
 
-struct gdt_entry gdt[NB_GDT_ENTRY];
-struct gdt_ptr gdt_ptr;
+Gdt_entry gdt[NB_GDT_ENTRY];
+Gdt_ptr gdt_ptr;
 
 extern void gdt_flush(void);
 
@@ -74,7 +76,7 @@ void gdt_install(void)
    gdt_set_entry(2, 0x0, 0xFFFFFFFF, 0x92, 0xC);
 
    /* Setup our GDT pointer */
-   gdt_ptr.limit = (sizeof(struct gdt_entry) * NB_GDT_ENTRY) - 1;
+   gdt_ptr.limit = (sizeof(Gdt_entry) * NB_GDT_ENTRY) - 1;
    gdt_ptr.base = (uint32_t) &gdt;
 
    /* Flush out the old GDT and install the new one */

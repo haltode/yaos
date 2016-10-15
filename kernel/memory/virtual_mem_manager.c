@@ -1,11 +1,11 @@
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
 #include <kernel/memory.h>
 #include <kernel/paging.h>
 
-struct page_dir *current_dir = 0;
+Page_dir *current_dir = 0;
 uint32_t current_dir_base_reg = 0;
 
 extern void load_page_directory(void);
@@ -29,7 +29,7 @@ static uint32_t get_pd_entry_phys_address(uint32_t *entry)
    return *entry & ~0xFFF;
 }
 
-static void virt_mem_switch_page_dir(struct page_dir *dir)
+static void virt_mem_switch_page_dir(Page_dir *dir)
 {
    current_dir = dir;
    current_dir_base_reg = (uint32_t) &dir->entry;
@@ -61,21 +61,21 @@ void virt_mem_free_page(uint32_t *pt_entry)
    pt_entry_del_flags(pt_entry, PTE_PRESENT_BIT);
 }
 
-uint32_t *virt_mem_lookup_pt_entry(struct page_table *table, uint32_t address)
+uint32_t *virt_mem_lookup_pt_entry(Page_table *table, uint32_t address)
 {
    if(table)
       return &table->entry[page_table_index(address)];
    return 0;
 }
 
-uint32_t *virt_mem_lookup_pd_entry(struct page_dir *dir, uint32_t address)
+uint32_t *virt_mem_lookup_pd_entry(Page_dir *dir, uint32_t address)
 {
    if(dir)
       return &dir->entry[page_table_index(address)];
    return 0;
 }
 
-struct page_dir *virt_mem_get_dir(void)
+Page_dir *virt_mem_get_dir(void)
 {
    return current_dir;
 }
@@ -83,7 +83,7 @@ struct page_dir *virt_mem_get_dir(void)
 void virt_mem_map_page(void *physical, void *virtual)
 {
    /* Get the page directory */
-   struct page_dir *dir = virt_mem_get_dir();
+   Page_dir *dir = virt_mem_get_dir();
 
    /* Get the page directory entry */
    uint32_t dir_index = page_directory_index((uint32_t) virtual);
@@ -94,12 +94,12 @@ void virt_mem_map_page(void *physical, void *virtual)
       /* The page table is not valid, we need to create one */
 
       /* Allocate the table */
-      struct page_table *new_table = (struct page_table*) phys_mem_alloc_frame();
+      Page_table *new_table = (Page_table *) phys_mem_alloc_frame();
       if(!new_table)
          return;
 
       /* Clear the table */
-      memset(new_table, 0, sizeof(struct page_table));
+      memset(new_table, 0, sizeof(Page_table));
 
       /* Set up the new page directory entry */
       uint32_t *new_pd_entry = &dir->entry[dir_index];
@@ -109,7 +109,7 @@ void virt_mem_map_page(void *physical, void *virtual)
    }
 
    /* Get the page table */
-   struct page_table *table = (struct page_table*) get_pd_entry_phys_address(pd_entry);
+   Page_table *table = (Page_table *) get_pd_entry_phys_address(pd_entry);
 
    /* Get the page */
    uint32_t *page = &table->entry[page_table_index((uint32_t) virtual)];
@@ -119,11 +119,11 @@ void virt_mem_map_page(void *physical, void *virtual)
    pt_entry_add_flags(page, PTE_PRESENT_BIT);
 }
 
-void virt_mem_setup_page_table(  struct page_table *table,
+void virt_mem_setup_page_table(  Page_table *table,
                                  uint32_t phys_addr, uint32_t virt_addr)
 {
    /* Clear the page table */
-   memset(table, 0, sizeof(struct page_table));
+   memset(table, 0, sizeof(Page_table));
 
    /* Fill the page table */
    uint32_t phys = phys_addr;
@@ -139,8 +139,8 @@ void virt_mem_setup_page_table(  struct page_table *table,
    }
 }
 
-void virt_mem_setup_page_dir_entry( struct page_dir *dir,
-                                    struct page_table *table, uint32_t address)
+void virt_mem_setup_page_dir_entry( Page_dir *dir,
+                                    Page_table *table, uint32_t address)
 {
    uint32_t *pd_entry = &dir->entry[page_directory_index(address)];
    pd_entry_add_flags(pd_entry, PDE_PRESENT_BIT);
@@ -151,15 +151,15 @@ void virt_mem_setup_page_dir_entry( struct page_dir *dir,
 void virt_mem_init(void)
 {
    /* Create the table */
-   struct page_table *identity_table = (struct page_table *) phys_mem_alloc_frame();
+   Page_table *identity_table = (Page_table *) phys_mem_alloc_frame();
    if(!identity_table)
       return;
 
    /* Create the page directory */
-   struct page_dir *dir = (struct page_dir *) phys_mem_alloc_frames(3);
+   Page_dir *dir = (Page_dir *) phys_mem_alloc_frames(3);
    if(!dir)
       return;
-   memset(dir, 0, sizeof(struct page_dir));
+   memset(dir, 0, sizeof(Page_dir));
 
    /* Identity map the first 4 MiB */
    virt_mem_setup_page_table(identity_table, 0x0, 0x0);
