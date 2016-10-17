@@ -92,6 +92,16 @@ bool pd_entry_is_writable(uint32_t pd_entry)
    return pd_entry & PDE_WRITABLE_BIT;
 }
 
+uint32_t pd_index(uint32_t virt_addr)
+{
+   return virt_addr >> 22;
+}
+
+uint32_t pd_entry_phys_addr(uint32_t *pd_entry)
+{
+   return *pd_entry & ~0xFFF;
+}
+
 /*
  * Page table
  */
@@ -124,4 +134,9 @@ bool pt_entry_is_present(uint32_t pt_entry)
 bool pt_entry_is_writable(uint32_t pt_entry)
 {
    return pt_entry & PTE_WRITABLE_BIT;
+}
+
+uint32_t pt_index(uint32_t virt_addr)
+{
+   return (virt_addr >> 12) & 0x3FF;
 }

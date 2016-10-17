@@ -39,6 +39,8 @@ void pd_entry_set_frame(uint32_t *pd_entry, uint32_t address);
 uint32_t pd_entry_get_frame(uint32_t pd_entry);
 bool pd_entry_is_present(uint32_t pd_entry);
 bool pd_entry_is_writable(uint32_t pd_entry);
+uint32_t pd_index(uint32_t virt_addr);
+uint32_t pd_entry_phys_addr(uint32_t *pd_entry);
 
 /*
  * Page table
@@ -55,5 +57,6 @@ void pt_entry_set_frame(uint32_t *pt_entry, uint32_t address);
 uint32_t pt_entry_get_frame(uint32_t pt_entry);
 bool pt_entry_is_present(uint32_t pt_entry);
 bool pt_entry_is_writable(uint32_t pt_entry);
+uint32_t pt_index(uint32_t virt_addr);
 
 #endif

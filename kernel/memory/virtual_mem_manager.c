@@ -12,29 +12,48 @@ extern void load_page_directory(void);
 extern void enable_paging(void);
 
 
-/* Return the index of the page directory entry given a virtual address */
-static uint32_t page_directory_index(uint32_t address)
+/*
+ * Setup
+ */
+
+void virt_mem_init(void)
 {
-   return address >> 22;
+   /* Create the page directory */
+   Page_dir *dir = (Page_dir *) phys_mem_alloc_frame();
+   if(!dir)
+      return;
+   memset(dir, 0, sizeof(Page_dir));
+
+   /* Create the first page table */
+   Page_table *identity_table = (Page_table *) phys_mem_alloc_frame();
+   if(!identity_table)
+      return;
+   memset(identity_table, 0, sizeof(Page_table));
+
+   /* Identity map the first 4 MiB (our kernel starts at 1 MiB) */
+   uint32_t phys_addr = 0x0;
+   uint32_t virt_addr = 0x0;
+   for(size_t i = 0; i < ENTRY_PER_TABLE; ++i) {
+      /* Create the page and set it */
+      uint32_t *page = &identity_table->entry[pt_index(virt_addr)];
+      pt_entry_set_frame(page, phys_addr);
+      pt_entry_add_flags(page, PTE_PRESENT_BIT);
+
+      phys_addr += PAGE_SIZE;
+      virt_addr += PAGE_SIZE;
+   }
+
+   /* Put the table in the page directory */
+   virt_mem_setup_page_dir_entry(dir, identity_table, 0x0);
+
+   virt_mem_switch_page_dir(dir); 
+   paging_setup();
+   enable_paging();
 }
 
-/* Return the index of the page table entry (table/dir) given a virtual address */
-static uint32_t page_table_index(uint32_t address)
-{
-   return (address >> 12) & 0x3FF;
-}
-
-static uint32_t get_pd_entry_phys_address(uint32_t *entry)
-{
-   return *entry & ~0xFFF;
-}
-
-static void virt_mem_switch_page_dir(Page_dir *dir)
-{
-   current_dir = dir;
-   current_dir_base_reg = (uint32_t) &dir->entry;
-   load_page_directory();
-}
+/*
+ * Allocation/Deallocation
+ */
 
 bool virt_mem_alloc_page(uint32_t *pt_entry)
 {
@@ -61,24 +80,11 @@ void virt_mem_free_page(uint32_t *pt_entry)
    pt_entry_del_flags(pt_entry, PTE_PRESENT_BIT);
 }
 
-uint32_t *virt_mem_lookup_pt_entry(Page_table *table, uint32_t address)
-{
-   if(table)
-      return &table->entry[page_table_index(address)];
-   return 0;
-}
+/*
+ * Mapping/Unmapping
+ */
 
-uint32_t *virt_mem_lookup_pd_entry(Page_dir *dir, uint32_t address)
-{
-   if(dir)
-      return &dir->entry[page_table_index(address)];
-   return 0;
-}
-
-Page_dir *virt_mem_get_dir(void)
-{
-   return current_dir;
-}
+/* TODO: add unmap function */
 
 void virt_mem_map_page(void *physical, void *virtual)
 {
@@ -86,7 +92,7 @@ void virt_mem_map_page(void *physical, void *virtual)
    Page_dir *dir = virt_mem_get_dir();
 
    /* Get the page directory entry */
-   uint32_t dir_index = page_directory_index((uint32_t) virtual);
+   uint32_t dir_index = pd_index((uint32_t) virtual);
    uint32_t *pd_entry = &dir->entry[dir_index];
 
    /* Check if the page table is valid (allocated and present) */
@@ -109,65 +115,37 @@ void virt_mem_map_page(void *physical, void *virtual)
    }
 
    /* Get the page table */
-   Page_table *table = (Page_table *) get_pd_entry_phys_address(pd_entry);
+   Page_table *table = (Page_table *) pd_entry_phys_addr(pd_entry);
 
    /* Get the page */
-   uint32_t *page = &table->entry[page_table_index((uint32_t) virtual)];
+   uint32_t *page = &table->entry[pt_index((uint32_t) virtual)];
 
    /* Map the page and mark it as present */
    pt_entry_set_frame(page, (uint32_t) physical);
    pt_entry_add_flags(page, PTE_PRESENT_BIT);
 }
 
-void virt_mem_setup_page_table(  Page_table *table,
-                                 uint32_t phys_addr, uint32_t virt_addr)
+/*
+ * Page directory related
+ */
+
+Page_dir *virt_mem_get_dir(void)
 {
-   /* Clear the page table */
-   memset(table, 0, sizeof(Page_table));
-
-   /* Fill the page table */
-   uint32_t phys = phys_addr;
-   uint32_t virt = virt_addr;
-   for(size_t i = 0; i < ENTRY_PER_TABLE; ++i) {
-      /* Create the page and set it */
-      uint32_t *page = &table->entry[page_table_index(virt)];
-      pt_entry_set_frame(page, phys);
-      pt_entry_add_flags(page, PTE_PRESENT_BIT);
-
-      phys += PAGE_SIZE;
-      virt += PAGE_SIZE;
-   }
+   return current_dir;
 }
 
 void virt_mem_setup_page_dir_entry( Page_dir *dir,
                                     Page_table *table, uint32_t address)
 {
-   uint32_t *pd_entry = &dir->entry[page_directory_index(address)];
+   uint32_t *pd_entry = &dir->entry[pd_index(address)];
    pd_entry_add_flags(pd_entry, PDE_PRESENT_BIT);
    pd_entry_add_flags(pd_entry, PDE_WRITABLE_BIT);
    pd_entry_set_frame(pd_entry, (uint32_t)table);
 }
 
-void virt_mem_init(void)
+void virt_mem_switch_page_dir(Page_dir *dir)
 {
-   /* Create the table */
-   Page_table *identity_table = (Page_table *) phys_mem_alloc_frame();
-   if(!identity_table)
-      return;
-
-   /* Create the page directory */
-   Page_dir *dir = (Page_dir *) phys_mem_alloc_frames(3);
-   if(!dir)
-      return;
-   memset(dir, 0, sizeof(Page_dir));
-
-   /* Identity map the first 4 MiB */
-   virt_mem_setup_page_table(identity_table, 0x0, 0x0);
-   
-   /* Put the table in the page directory */
-   virt_mem_setup_page_dir_entry(dir, identity_table, 0x0);
-
-   virt_mem_switch_page_dir(dir); 
-   paging_setup();
-   enable_paging();
+   current_dir = dir;
+   current_dir_base_reg = (uint32_t) &dir->entry;
+   load_page_directory();
 }

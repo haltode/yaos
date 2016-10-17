@@ -60,8 +60,9 @@ void phys_mem_init(Multiboot_info *boot_info)
    uint32_t kernel_size       = kernel_end_addr - kernel_start_addr;
 
    /* Put the bitmap at the end of the kernel */
-   uint32_t bitmap_addr = kernel_end_addr - sizeof(Bitmap);
-   uint32_t start_addr  = kernel_end_addr;
+   uint32_t bitmap_addr = kernel_end_addr;
+   /* Only start allocation after the bitmap itfself */
+   uint32_t start_addr  = kernel_end_addr + bitmap_size;
 
    mem_map          = (Bitmap *) bitmap_addr;
    mem_map->address = (uint32_t *) start_addr;
@@ -82,6 +83,8 @@ void phys_mem_init(Multiboot_info *boot_info)
 
    /* Mark the kernel space as used so we don't overwrite it */
    set_region_used(kernel_start_addr, kernel_size);
+   /* Mark the bitmap space (at the end of the kernel) as used too */
+   set_region_used(bitmap_addr, bitmap_size);
 }
 
 /*
