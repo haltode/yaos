@@ -32,7 +32,7 @@ char* utoa(unsigned int value, char* str, int base)
 
    while(value != 0) {
       int remainder = value % base;
-      value = value / base;
+      value /= base;
       /* For bigger bases than 10 (eg: hexadecimal) */
       if(remainder > 9)
          str[i] = (remainder - 10) + 'a';
