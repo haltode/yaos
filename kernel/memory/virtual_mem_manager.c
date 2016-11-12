@@ -81,10 +81,8 @@ void virt_mem_free_page(uint32_t *pt_entry)
 }
 
 /*
- * Mapping/Unmapping
+ * Mapping
  */
-
-/* TODO: add unmap function */
 
 void virt_mem_map_page(void *physical, void *virtual)
 {
