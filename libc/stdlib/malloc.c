@@ -1,6 +1,6 @@
 #include <string.h>
 
-#if defined(__is_libk)
+#ifdef __is_libk
 
 #include <kernel/memory.h>
 

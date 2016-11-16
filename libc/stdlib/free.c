@@ -1,4 +1,4 @@
-#if defined(__is_libk)
+#ifdef __is_libk
 
 #else
 
