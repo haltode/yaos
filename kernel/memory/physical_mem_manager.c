@@ -7,9 +7,6 @@
 #include <kernel/memory.h>
 #include <kernel/multiboot.h>
 
-#define FRAME_PER_BYTE     8
-#define FRAME_SIZE         4096
-
 Bitmap *mem_map = 0;
 
 /* Symbols defined in the linker script */

@@ -1,6 +1,8 @@
 #ifndef _STDLIB_H
 #define _STDLIB_H 1
 
+#include <stddef.h>
+
 #include <sys/cdefs.h>
 
 #ifdef __cplusplus
@@ -12,6 +14,8 @@ void abort(void);
 
 char *utoa(unsigned int value, char* str, int base);
 char *itoa(int value, char* str, int base);
+
+void *kmalloc(size_t size);
 
 #ifdef __cplusplus
 }

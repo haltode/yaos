@@ -38,6 +38,15 @@ void kernel_main(Multiboot_info *boot_info)
    puts("");
    puts("Hello kernel World!");
 
+   /* int ret = virt_mem_alloc_page(0x400000); */
+   /* printf("%d\n", ret); */
+
+   #include <stdlib.h>
+   int *ret = kmalloc(8);
+   printf("ret: 0x%x\n", ret);
+   printf("*ret: 0x%x\n", *ret);
+   printf("&ret: 0x%x\n", &ret);
+
    /* Make sure the main function doesn't exit prematurely 
       (Otherwise it disables interrupts) */
    for(;;)

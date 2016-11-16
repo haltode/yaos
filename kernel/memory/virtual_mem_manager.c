@@ -30,6 +30,15 @@ void virt_mem_init(void)
       return;
    memset(identity_table, 0, sizeof(Page_table));
 
+   /* Create the kernel heap page table */
+   Page_table *kernel_heap = (Page_table *) phys_mem_alloc_frame();
+   if(!kernel_heap)
+      return;
+   memset(kernel_heap, 0, sizeof(Page_table));
+
+   /* Init the kernel heap datastructure */
+   init_kernel_heap();
+
    /* Identity map the first 4 MiB (our kernel starts at 1 MiB) */
    uint32_t phys_addr = 0x0;
    uint32_t virt_addr = 0x0;
@@ -42,13 +51,46 @@ void virt_mem_init(void)
       phys_addr += PAGE_SIZE;
       virt_addr += PAGE_SIZE;
    }
+   /* Identity map the next 4 MiB for our kernel heap */
+   for(size_t i = 0; i < ENTRY_PER_TABLE; ++i) {
+      uint32_t *page = &kernel_heap->entry[pt_index(virt_addr)];
+      pt_entry_set_frame(page, phys_addr);
+      pt_entry_add_flags(page, PTE_PRESENT_BIT);
 
-   /* Put the table in the page directory */
+      phys_addr += PAGE_SIZE;
+      virt_addr += PAGE_SIZE;
+   }
+
+   /* Put the tables in the page directory */
    virt_mem_setup_page_dir_entry(dir, identity_table, 0x0);
+   virt_mem_setup_page_dir_entry(dir, kernel_heap, 0x400000); /* 4 MiB */
 
    virt_mem_switch_page_dir(dir); 
    paging_setup();
    enable_paging();
+}
+
+/*
+ * Kernel Heap
+ */
+
+/* The free space in the virtual memory is a linked list */
+Node *free_space;
+
+void init_kernel_heap(void)
+{
+   free_space = (Node *) KERNEL_HEAP_ADDR;
+   free_space->next = NULL;
+   free_space->prev = NULL;
+   free_space->size = get_nb_units(KERNEL_HEAP_SIZE);
+}
+
+/* Each block of free space in the kernel heap is measured in
+   units instead of bytes, where a unit represents the header
+   of the block (pointers + size) */
+size_t get_nb_units(size_t byte_size)
+{
+   return ((byte_size + sizeof(Node) - 1) / sizeof(Node)) + 1;
 }
 
 /*

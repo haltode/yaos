@@ -11,6 +11,9 @@
  * Physical Memory Manager
  */
 
+#define FRAME_PER_BYTE     8
+#define FRAME_SIZE         4096
+
 void phys_mem_init(Multiboot_info *boot_info);
 
 void *phys_mem_alloc_frames(size_t size);
@@ -22,7 +25,22 @@ void phys_mem_free_frame(void *frame);
  * Virtual Memory Manager
  */
 
+#define KERNEL_HEAP_ADDR 0x400000
+#define KERNEL_HEAP_SIZE 0x400000
+
+/* Node of a linked list */
+typedef struct Node Node;
+struct Node {
+   Node *next;
+   Node *prev;
+   size_t size;
+};
+
+
 void virt_mem_init(void);
+
+void init_kernel_heap(void);
+size_t get_nb_units(size_t byte_size);
 
 bool virt_mem_alloc_page(uint32_t *pt_entry);
 void virt_mem_free_page(uint32_t *pt_entry);
