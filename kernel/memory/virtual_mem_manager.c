@@ -90,7 +90,7 @@ void init_kernel_heap(void)
    of the block (pointers + size) */
 size_t get_nb_units(size_t byte_size)
 {
-   return ((byte_size + sizeof(Node) - 1) / sizeof(Node)) + 1;
+   return (byte_size + sizeof(Node) - 1) / sizeof(Node);
 }
 
 /*
