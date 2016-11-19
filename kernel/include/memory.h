@@ -25,31 +25,30 @@ void phys_mem_free_frame(void *frame);
  * Virtual Memory Manager
  */
 
-#define KERNEL_HEAP_ADDR 0x400000
-#define KERNEL_HEAP_SIZE 0x400000
-
-/* Node of a linked list */
-typedef struct Node Node;
-struct Node {
-   Node *next;
-   Node *prev;
-   size_t size;
-};
-
-
 void virt_mem_init(void);
-
-void init_kernel_heap(void);
-size_t get_nb_units(size_t byte_size);
 
 bool virt_mem_alloc_page(uint32_t *pt_entry);
 void virt_mem_free_page(uint32_t *pt_entry);
 
 void virt_mem_map_page(void *physical, void *virtual);
+void virt_mem_unmap_page(void *virtual);
 
 Page_dir *virt_mem_get_dir(void);
 void virt_mem_setup_page_dir_entry( Page_dir *dir,
                                     Page_table *table, uint32_t address);
 void virt_mem_switch_page_dir(Page_dir *dir);
+
+void virt_mem_flush_tlb(void);
+void virt_mem_flush_tlb_entry(void *address);
+
+/*
+ * Heap Manager
+ */
+
+/* The kernel heap is located at 512 MiB and expands to 1 GiB */
+#define KERNEL_HEAP_ADDR   0x20000000
+#define KERNEL_HEAP_SIZE   0x20000000
+
+void heap_init(void);
 
 #endif

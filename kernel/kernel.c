@@ -29,6 +29,9 @@ void kernel_main(Multiboot_info *boot_info)
    virt_mem_init();
    puts("(kernel) Virtual memory manager enabled.");
 
+   heap_init();
+   puts("(kernel) Heap manager enabled.");
+
    timer_install();
    puts("(kernel) Timer enabled.");
 
@@ -41,21 +44,21 @@ void kernel_main(Multiboot_info *boot_info)
    /* int ret = virt_mem_alloc_page(0x400000); */
    /* printf("%d\n", ret); */
 
-   #include <stdlib.h>
-   int *ret = kmalloc(8);
-   printf("ret: 0x%x\n", ret);
-   printf("*ret: 0x%x\n", *ret);
-   printf("&ret: 0x%x\n", &ret);
+   /* #include <stdlib.h> */
+   /* int *ret = kmalloc(8); */
+   /* printf("ret: 0x%x\n", ret); */
+   /* printf("*ret: 0x%x\n", *ret); */
+   /* printf("&ret: 0x%x\n", &ret); */
 
-   int *ret2 = kmalloc(8);
-   printf("ret2: 0x%x\n", ret2);
-   printf("*ret2: 0x%x\n", *ret2);
-   printf("&ret2: 0x%x\n", &ret2);
+   /* int *ret2 = kmalloc(8); */
+   /* printf("ret2: 0x%x\n", ret2); */
+   /* printf("*ret2: 0x%x\n", *ret2); */
+   /* printf("&ret2: 0x%x\n", &ret2); */
 
-   kfree(ret);
-   printf("ret: 0x%x\n", ret);
-   printf("*ret: 0x%x\n", *ret);
-   printf("&ret: 0x%x\n", &ret);
+   /* kfree(ret); */
+   /* printf("ret: 0x%x\n", ret); */
+   /* printf("*ret: 0x%x\n", *ret); */
+   /* printf("&ret: 0x%x\n", &ret); */
 
    /* extern Node *free_space; */
    /* printf("0x%x\n", free_space); */
