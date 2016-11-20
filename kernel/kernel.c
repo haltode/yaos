@@ -41,35 +41,6 @@ void kernel_main(Multiboot_info *boot_info)
    puts("");
    puts("Hello kernel World!");
 
-   /* int ret = virt_mem_alloc_page(0x400000); */
-   /* printf("%d\n", ret); */
-
-   /* #include <stdlib.h> */
-   /* int *ret = kmalloc(8); */
-   /* printf("ret: 0x%x\n", ret); */
-   /* printf("*ret: 0x%x\n", *ret); */
-   /* printf("&ret: 0x%x\n", &ret); */
-
-   /* int *ret2 = kmalloc(8); */
-   /* printf("ret2: 0x%x\n", ret2); */
-   /* printf("*ret2: 0x%x\n", *ret2); */
-   /* printf("&ret2: 0x%x\n", &ret2); */
-
-   /* kfree(ret); */
-   /* printf("ret: 0x%x\n", ret); */
-   /* printf("*ret: 0x%x\n", *ret); */
-   /* printf("&ret: 0x%x\n", &ret); */
-
-   /* extern Node *free_space; */
-   /* printf("0x%x\n", free_space); */
-   /* printf("0x%x\n", free_space->size); */
-   /* printf("0x%x\n", free_space->next); */
-   /* printf("0x%x\n", free_space->prev); */
-   /* int *ret3 = kmalloc(8); */
-   /* printf("ret3: 0x%x\n", ret3); */
-   /* printf("*ret3: 0x%x\n", *ret3); */
-   /* printf("&ret3: 0x%x\n", &ret3); */
-
    /* Make sure the main function doesn't exit prematurely 
       (Otherwise it disables interrupts) */
    for(;;)
