@@ -2,7 +2,6 @@
 #define _KERNEL_MEMORY_H
 
 #include <stdbool.h>
-#include <stddef.h>
 
 #include <kernel/multiboot.h>
 #include <kernel/paging.h>
@@ -16,10 +15,8 @@
 
 void phys_mem_init(Multiboot_info *boot_info);
 
-void *phys_mem_alloc_frames(size_t size);
 void *phys_mem_alloc_frame(void);
-void phys_mem_free_frames(void *frames, size_t size);
-void phys_mem_free_frame(void *frame);
+void phys_mem_free_frame(void *ptr);
 
 /*
  * Virtual Memory Manager

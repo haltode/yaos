@@ -88,36 +88,24 @@ void phys_mem_init(Multiboot_info *boot_info)
  * Allocation/Deallocation
  */
 
-void *phys_mem_alloc_frames(size_t size)
+void *phys_mem_alloc_frame(void)
 {
-   uint32_t frame = find_first_n_free(mem_map, size);
+   uint32_t frame = find_first_free(mem_map);
 
    /* Out of memory */
    if(!frame)
       return 0;
 
-   for(size_t i = 0; i < size; ++i)
-      set_bit(mem_map, frame + i);
+   set_bit(mem_map, frame);
 
    uint32_t address = frame * FRAME_SIZE;
    return (void *) address;
 }
 
-void *phys_mem_alloc_frame(void)
+void phys_mem_free_frame(void *ptr)
 {
-   return phys_mem_alloc_frames(1);
-}
-
-void phys_mem_free_frames(void *frames, size_t size)
-{
-   uint32_t address = (uint32_t) frames;
+   uint32_t address = (uint32_t) ptr;
    uint32_t frame = address / FRAME_SIZE;
 
-   for(size_t i = 0; i < size; ++i)
-      clear_bit(mem_map, frame + i);
-}
-
-void phys_mem_free_frame(void *frame)
-{
-   phys_mem_free_frames(frame, 1);
+   clear_bit(mem_map, frame);
 }
