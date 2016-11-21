@@ -186,3 +186,28 @@ void virt_mem_flush_tlb_entry(void *address)
 {
    asm volatile ("invlpg (%0)" ::"r" (address) : "memory");
 }
+
+/*
+ * Miscellaneous
+ */
+
+void *virt_mem_get_phys_addr(void *virtual)
+{
+   Page_dir *dir = (Page_dir *) virt_mem_get_dir();
+   uint32_t dir_index = pd_index((uint32_t) virtual);
+   uint32_t *pd_entry = &dir->entry[dir_index];
+
+   /* Check if the page table is valid (allocated and present) */
+   if((*pd_entry & PTE_PRESENT_BIT) == PTE_PRESENT_BIT) {
+      /* Get the corresponding page table and page */
+      Page_table *table = (Page_table *) pd_entry_phys_addr(pd_entry);
+      uint32_t *page = &table->entry[pt_index((uint32_t) virtual)];
+
+      uint32_t frame     = pt_entry_get_frame(*page);
+      uint32_t remaining = ((uint32_t) virtual & 0xFFF);
+
+      return (void *) (frame + remaining);
+   }
+
+   return 0;
+}

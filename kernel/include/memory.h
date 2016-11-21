@@ -2,6 +2,7 @@
 #define _KERNEL_MEMORY_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #include <kernel/multiboot.h>
 #include <kernel/paging.h>
@@ -38,6 +39,8 @@ void virt_mem_switch_page_dir(Page_dir *dir);
 void virt_mem_flush_tlb(void);
 void virt_mem_flush_tlb_entry(void *address);
 
+void *virt_mem_get_phys_addr(void *virtual);
+
 /*
  * Heap Manager
  */
@@ -47,5 +50,7 @@ void virt_mem_flush_tlb_entry(void *address);
 #define KERNEL_HEAP_SIZE   0x20000000
 
 void heap_init(void);
+
+void *heap_expand(ptrdiff_t increment);
 
 #endif

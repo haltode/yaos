@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <kernel/bitmap.h>
+#include <kernel/memory.h>
 
 /*
  * This bitmap datastructure is used to represent physical memory,
@@ -45,5 +46,6 @@ uint32_t find_first_free(Bitmap *bitmap)
 
 void set_all_bits(Bitmap *bitmap)
 {
-   memset(bitmap->address, 0xFFFFFFFF, bitmap->size);
+   for(uint32_t frame = 0; frame < bitmap->total_frames; ++frame)
+      set_bit(bitmap, frame);
 }

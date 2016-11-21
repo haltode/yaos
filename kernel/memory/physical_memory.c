@@ -19,37 +19,29 @@ extern uint32_t kernel_end;
 
 static void set_region_free(uint32_t base, size_t size)
 {
-   uint32_t start_addr = base;
+   uint32_t start_addr = base / FRAME_SIZE;
    uint32_t nb_frames = size / FRAME_SIZE;
 
-   for(size_t i = 0; i < nb_frames; ++i) {
-      uint32_t frame_addr = start_addr + i * FRAME_SIZE;
-      uint32_t bit = frame_addr / FRAME_SIZE;
-
-      clear_bit(mem_map, bit);
-   }
+   for(size_t i = 0; i < nb_frames; ++i)
+      clear_bit(mem_map, start_addr + i);
 }
 
 static void set_region_used(uint32_t base, size_t size)
 {
-   uint32_t start_addr = base;
+   uint32_t start_addr = base / FRAME_SIZE;
    uint32_t nb_frames = size / FRAME_SIZE;
 
-   for(size_t i = 0; i < nb_frames; ++i) {
-      uint32_t frame_addr = start_addr + i * FRAME_SIZE;
-      uint32_t bit = frame_addr / FRAME_SIZE;
-
-      set_bit(mem_map, bit);
-   }
+   for(size_t i = 0; i < nb_frames; ++i)
+      set_bit(mem_map, start_addr + i);
 }
 
 void phys_mem_init(Multiboot_info *boot_info)
 {
    /* Get the memory info from GRUB */
-   uint32_t mem_size_kb = 1024 + boot_info->mem_lower + 
-                                 boot_info->mem_upper * 32;
-   uint32_t nb_frames   = mem_size_kb / 4;
-   uint32_t bitmap_size = nb_frames / 32;
+   uint32_t mem_size_kb     = boot_info->mem_lower + boot_info->mem_upper;
+   uint32_t nb_frames       = mem_size_kb / 4;
+   uint32_t nb_frames_bytes = nb_frames * FRAME_PER_BYTE;
+   uint32_t bitmap_size     = nb_frames_bytes / 32;
 
    /* Info about the kernel (4 KiB align the end address) */
    uint32_t kernel_start_addr = (uint32_t) &kernel_start;
@@ -57,13 +49,11 @@ void phys_mem_init(Multiboot_info *boot_info)
    uint32_t kernel_size       = kernel_end_addr - kernel_start_addr;
 
    /* Put the bitmap at the end of the kernel */
-   uint32_t bitmap_addr = kernel_end_addr;
-   /* Only start allocation after the bitmap itfself */
-   uint32_t start_addr  = kernel_end_addr + bitmap_size;
-
-   mem_map          = (Bitmap *) bitmap_addr;
-   mem_map->address = (uint32_t *) start_addr;
-   mem_map->size    = bitmap_size;
+   uint32_t bitmap_addr  = kernel_end_addr;
+   mem_map               = (Bitmap *) bitmap_addr;
+   mem_map->address      = (uint32_t *) (bitmap_addr + sizeof(Bitmap) + 1);
+   mem_map->size         = bitmap_size;
+   mem_map->total_frames = nb_frames;
 
    /* By default, the bitmap is marked as full */
    set_all_bits(mem_map);
@@ -78,10 +68,8 @@ void phys_mem_init(Multiboot_info *boot_info)
          set_region_free(mmap->base_addr_low, mmap->length_low);
    }
 
-   /* Mark the kernel space as used so we don't overwrite it */
-   set_region_used(kernel_start_addr, kernel_size);
-   /* Mark the bitmap space (at the end of the kernel) as used too */
-   set_region_used(bitmap_addr, bitmap_size);
+   /* Mark the kernel and bitmap space as used so we don't overwrite it */
+   set_region_used(kernel_start_addr, kernel_size + bitmap_size + 1);
 }
 
 /*

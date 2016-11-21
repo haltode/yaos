@@ -8,6 +8,7 @@ typedef struct bitmap_t Bitmap;
 struct bitmap_t {
    uint32_t *address;
    uint32_t size;
+   uint32_t total_frames;
 };
 
 void set_bit(Bitmap *bitmap, uint32_t bit);
