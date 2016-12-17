@@ -16,7 +16,7 @@ void heap_init(void)
 }
 
 /*
- * 
+ * Expansion
  */
 
 void *heap_expand(ptrdiff_t increment)
@@ -35,7 +35,7 @@ void *heap_expand(ptrdiff_t increment)
          virt_mem_map_page(frame, kernel_heap_top);
 
          memset(kernel_heap_top, 0, FRAME_SIZE);
-         kernel_heap_top += FRAME_SIZE;
+         kernel_heap_top = (uint32_t *) ((uint32_t) kernel_heap_top + FRAME_SIZE);
       }
 
       return address;
@@ -45,7 +45,7 @@ void *heap_expand(ptrdiff_t increment)
       uint32_t nb_pages = (-increment) / FRAME_SIZE;
 
       for(size_t i = 0; i < nb_pages; ++i) {
-         kernel_heap_top -= FRAME_SIZE;
+         kernel_heap_top = (uint32_t *) ((uint32_t) kernel_heap_top - FRAME_SIZE);
 
          void *frame = virt_mem_get_phys_addr(kernel_heap_top);
 

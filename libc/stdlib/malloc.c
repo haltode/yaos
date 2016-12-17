@@ -2,9 +2,11 @@
 
 #ifdef __is_libk
 
+#include <kernel/doug_lea.h>
+
 void *kmalloc(size_t size)
 {
-   return NULL;
+   return DougLea_malloc(size);
 }
 
 #else

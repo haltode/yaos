@@ -40,6 +40,10 @@ Here are a few resources that helped me create the kernel.
    - [osdever.net - Memory Management 2](http://www.osdever.net/tutorials/view/memory-management-2)
    - [Mapping With A Recursive Page Directory](http://www.rohitab.com/discuss/topic/31139-tutorial-paging-memory-mapping-with-a-recursive-page-directory/)
 
+- Memory allocator
+
+   - [A Memory Allocator - Doug Lea](http://g.oswego.edu/dl/html/malloc.html)
+
 ### Interrupts
 
 - [OSDev.org - Interrupts](http://wiki.osdev.org/Interrupts)

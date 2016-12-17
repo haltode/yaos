@@ -111,6 +111,7 @@ void virt_mem_map_page(void *physical, void *virtual)
    /* Map the page and mark it as present */
    pt_entry_set_frame(page, (uint32_t) physical);
    pt_entry_add_flags(page, PTE_PRESENT_BIT);
+   pt_entry_add_flags(page, PTE_WRITABLE_BIT);
 
    virt_mem_flush_tlb_entry(virtual);
 }
