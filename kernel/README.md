@@ -64,6 +64,12 @@ Here are a few resources that helped me create the kernel.
    - [Bran's Kernel Development - IRQs and PICs](http://www.osdever.net/bkerndev/Docs/irqs.htm)
    - [OSDev.org - PIC](http://wiki.osdev.org/PIC)
 
+### File system
+
+- [OSDev.org - File Systems](http://wiki.osdev.org/File_Systems)
+- [OSDev.org - Initrd](http://wiki.osdev.org/Initrd)
+- [OSDev.org - Tar](http://wiki.osdev.org/Tar)
+
 ### System Clock
 
 - [Bran's Kernel Development - The PIT: A System Clock](http://www.osdever.net/bkerndev/Docs/pit.htm)
