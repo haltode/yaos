@@ -5,7 +5,7 @@
 /* Convert a number as a string in a certain base to an integer value */
 long strtol(const char *str, char **str_end, int base)
 {
-   /* Unused parameters: avoid a warning */
+   /* Unused parameter (avoid a warning) */
    (void)(str_end);
 
    long value = 0;

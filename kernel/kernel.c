@@ -15,7 +15,7 @@ void kernel_main(Multiboot_info *args)
 {
    boot_info = args;
 
-   terminal_initialize();
+   terminal_init();
    puts("(kernel) TTY loaded.");
 
    gdt_install();

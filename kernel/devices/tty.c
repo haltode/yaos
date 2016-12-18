@@ -23,7 +23,7 @@ static uint16_t terminal_pos(uint8_t x, uint8_t y)
    return y * VGA_WIDTH + x;
 }
 
-void terminal_initialize(void)
+void terminal_init(void)
 {
    terminal_row = 0;
    terminal_column = 0;

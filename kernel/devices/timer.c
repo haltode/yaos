@@ -18,8 +18,7 @@ void timer_wait(const uint32_t ticks)
 
 void timer_handler(Stack *registers)
 {
-   /* We don't use the stack structure in this function,
-      so we do this to avoid a warning when compiling */
+   /* Unused parameter (avoid a warning) */
    (void)(registers);
 
    ++timer_ticks;
@@ -46,7 +45,6 @@ static void timer_phase(const uint32_t hz)
 
 void timer_install(void)
 {
-   /* Set up the system clock by installing the timer handler into IRQ0 */
    irq_install_handler(0, timer_handler);
 
    /* 100Hz */

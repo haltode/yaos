@@ -1,3 +1,6 @@
+/* Doug Lea's malloc and free implementation
+   See http://g.oswego.edu/dl/html/malloc.html */
+
  #include <kernel/doug_lea.h>
 
 /*------------------------------ internal #includes ---------------------- */

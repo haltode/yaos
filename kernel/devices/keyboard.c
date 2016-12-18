@@ -116,8 +116,7 @@ unsigned char us_layout[] = {
 
 void keyboard_handler(Stack *registers)
 {
-   /* We don't use the stack structure in this function,
-      so we do this to avoid a warning when compiling */
+   /* Unused parameter (avoid a warning) */
    (void)(registers);
 
    uint8_t scancode;
@@ -170,6 +169,5 @@ void keyboard_handler(Stack *registers)
 
 void keyboard_install(void)
 {
-   /* Set up the keyboard by installing it's handler into IRQ1 */
    irq_install_handler(1, keyboard_handler);
 }

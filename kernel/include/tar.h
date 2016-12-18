@@ -6,7 +6,7 @@
 
 #define TAR_ENTRY_SIZE 512
 
-typedef struct tar_entry_t tar_entry_t;
+typedef struct tar_entry_t Tar_entry;
 struct tar_entry_t
 {
    char filename[100];
@@ -14,13 +14,14 @@ struct tar_entry_t
    char uid[8];
    char gid[8];
    char size[12];
-   char mtime[12];
+   char modiftime[12];
    char checksum[8];
    char typeflag[1];
 };
 
-bool is_tar_entry_valid(tar_entry_t *entry);
-tar_entry_t *tar_get_next_entry(tar_entry_t *entry);
-uint32_t tar_get_nb_files(tar_entry_t *init_entry);
+bool is_tar_entry_valid(Tar_entry *entry);
+Tar_entry *tar_get_entry(Tar_entry *init_entry, uint32_t index);
+Tar_entry *tar_get_next_entry(Tar_entry *entry);
+uint32_t tar_get_nb_files(Tar_entry *init_entry);
 
 #endif
