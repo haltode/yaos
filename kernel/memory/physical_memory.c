@@ -9,6 +9,8 @@
 
 Bitmap *mem_map = 0;
 
+extern Multiboot_info *boot_info;
+
 /* Symbols defined in the linker script */
 extern uint32_t kernel_start;
 extern uint32_t kernel_end;
@@ -35,7 +37,7 @@ static void set_region_used(uint32_t base, size_t size)
       set_bit(mem_map, start_addr + i);
 }
 
-void phys_mem_init(Multiboot_info *boot_info)
+void phys_mem_init(void)
 {
    /* Get the memory info from GRUB */
    uint32_t mem_size_kb     = boot_info->mem_lower + boot_info->mem_upper;

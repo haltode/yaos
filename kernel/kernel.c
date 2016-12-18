@@ -5,11 +5,16 @@
 #include <kernel/keyboard.h>
 #include <kernel/memory.h>
 #include <kernel/multiboot.h>
+#include <kernel/ramdisk.h>
 #include <kernel/timer.h>
 #include <kernel/tty.h>
 
-void kernel_main(Multiboot_info *boot_info)
+Multiboot_info *boot_info;
+
+void kernel_main(Multiboot_info *args)
 {
+   boot_info = args;
+
    terminal_initialize();
    puts("(kernel) TTY loaded.");
 
@@ -23,7 +28,7 @@ void kernel_main(Multiboot_info *boot_info)
    irq_install();
    puts("(kernel) IRQ loaded.");
 
-   phys_mem_init(boot_info);
+   phys_mem_init();
    puts("(kernel) Physical memory manager enabled.");
 
    virt_mem_init();
@@ -37,6 +42,9 @@ void kernel_main(Multiboot_info *boot_info)
 
    keyboard_install();
    puts("(kernel) Keyboard enabled.");
+
+   ramdisk_init();
+   puts("(kernel) Ramdisk initialized.");
    
    puts("");
    puts("Hello kernel World!");

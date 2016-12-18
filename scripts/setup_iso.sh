@@ -4,9 +4,7 @@ mkdir -p isodir/boot
 mkdir -p isodir/boot/grub
 
 cp sysroot/boot/yaos.kernel isodir/boot/yaos.kernel
-cat > isodir/boot/grub/grub.cfg << EOF
-menuentry "yaos" {
-   multiboot /boot/yaos.kernel
-}
-EOF
+cp config/initrd.tar isodir/boot/initrd.tar
+cp config/grub.cfg isodir/boot/grub/grub.cfg
+
 grub-mkrescue -o yaos.iso isodir

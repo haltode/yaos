@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include <kernel/multiboot.h>
 #include <kernel/paging.h>
 
 /*
@@ -14,7 +13,7 @@
 #define FRAME_PER_BYTE     8
 #define FRAME_SIZE         4096
 
-void phys_mem_init(Multiboot_info *boot_info);
+void phys_mem_init(void);
 
 void *phys_mem_alloc_frame(void);
 void phys_mem_free_frame(void *ptr);
