@@ -2,6 +2,7 @@
 
 #include <kernel/interrupts.h>
 #include <kernel/io.h>
+#include <kernel/sys.h>
 
 #define NB_IRQ_ROUTINES 16
 
@@ -115,7 +116,7 @@ void irq_install(void)
    idt_set_entry(47, (uint32_t)irq15, 0x08, 0x8E);
 
    /* Now we can allow IRQs to happen */
-   asm volatile ("sti");
+   sys_enable_interrupts();
 }
 
 /* Each of the IRQ ISRs point to this function, rather than

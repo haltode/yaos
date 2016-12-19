@@ -6,6 +6,7 @@
 #include <kernel/memory.h>
 #include <kernel/multiboot.h>
 #include <kernel/ramdisk.h>
+#include <kernel/sys.h>
 #include <kernel/timer.h>
 #include <kernel/tty.h>
 
@@ -52,5 +53,5 @@ void kernel_main(Multiboot_info *args)
    /* Make sure the main function doesn't exit prematurely 
       (Otherwise it disables interrupts) */
    for(;;)
-      asm("hlt");
+      sys_halt();
 }
