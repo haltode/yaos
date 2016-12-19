@@ -16,6 +16,7 @@ char *itoa(int value, char* str, int base);
 char *utoa(unsigned int value, char* str, int base);
 long strtol(const char *str, char **str_end, int base);
 
+void *kcalloc(size_t num, size_t size);
 void *kmalloc(size_t size);
 void kfree(void *ptr);
 

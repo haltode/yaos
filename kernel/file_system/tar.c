@@ -31,7 +31,7 @@ Tar_entry *tar_get_entry(Tar_entry *init_entry, uint32_t index)
    size_t i = 0;
 
    while(true) {
-      if(current->filename[0] == '\0')
+      if(current->name[0] == '\0')
          break;
 
       if(index == i)
@@ -74,7 +74,7 @@ uint32_t tar_get_nb_files(Tar_entry *init_entry)
    uint32_t nb_files = 0;
 
    while(true) {
-      if(current->filename[0] == '\0')
+      if(current->name[0] == '\0')
          break;
 
       current = tar_get_next_entry(current);

@@ -5,10 +5,10 @@
 #include <kernel/keyboard.h>
 #include <kernel/memory.h>
 #include <kernel/multiboot.h>
-#include <kernel/ramdisk.h>
 #include <kernel/sys.h>
 #include <kernel/timer.h>
 #include <kernel/tty.h>
+#include <kernel/vfs.h>
 
 Multiboot_info *boot_info;
 
@@ -44,8 +44,8 @@ void kernel_main(Multiboot_info *args)
    keyboard_install();
    puts("(kernel) Keyboard enabled.");
 
-   ramdisk_init();
-   puts("(kernel) Ramdisk initialized.");
+   vfs_init();
+   puts("(kernel) Virtual file system initialized.");
    
    puts("");
    puts("Hello kernel World!");

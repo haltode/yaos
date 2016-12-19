@@ -7,16 +7,15 @@
 #define TAR_ENTRY_SIZE 512
 
 typedef struct tar_entry_t Tar_entry;
-struct tar_entry_t
-{
-   char filename[100];
+struct tar_entry_t {
+   char name[100];
    char mode[8];
    char uid[8];
    char gid[8];
    char size[12];
-   char modiftime[12];
+   char modif_time[12];
    char checksum[8];
-   char typeflag[1];
+   char type[1];
 };
 
 bool is_tar_entry_valid(Tar_entry *entry);
