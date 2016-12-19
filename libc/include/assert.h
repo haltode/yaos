@@ -13,7 +13,7 @@ extern "C" {
    do {                                                      \
       if(!(expr)) {                                          \
          printf("Failed assertion: (%s) at line %d of %s\n", \
-                  str(expr), __LINE__, __FILE__);              \
+                  str(expr), __LINE__, __FILE__);            \
          abort();                                            \
       }                                                      \
    } while(0)
