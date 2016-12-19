@@ -69,6 +69,8 @@ Here are a few resources that helped me create the kernel.
 - [OSDev.org - File Systems](http://wiki.osdev.org/File_Systems)
 - [OSDev.org - Initrd](http://wiki.osdev.org/Initrd)
 - [OSDev.org - Tar](http://wiki.osdev.org/Tar)
+- [OSDev.org - VFS](http://wiki.osdev.org/VFS)
+- [James Molloy - The VFS and the initrd](http://knusbaum.inlisp.org/jamesmolloy/tutorial_html/8.-The%20VFS%20and%20the%20initrd.html)
 
 ### System Clock
 
