@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -7,6 +8,8 @@
 
 bool is_tar_entry_valid(Tar_entry *entry)
 {
+   assert(entry != NULL);
+
    uint8_t *address = (uint8_t *) entry;
    uint32_t checksum = strtol(entry->checksum, NULL, 8);
 
@@ -22,6 +25,8 @@ bool is_tar_entry_valid(Tar_entry *entry)
 
 Tar_entry *tar_get_entry(Tar_entry *init_entry, uint32_t index)
 {
+   assert(init_entry != NULL);
+
    Tar_entry *current = init_entry;
    size_t i = 0;
 
@@ -44,6 +49,8 @@ Tar_entry *tar_get_entry(Tar_entry *init_entry, uint32_t index)
 
 Tar_entry *tar_get_next_entry(Tar_entry *entry)
 {
+   assert(entry != NULL);
+
    uint32_t address = (uint32_t) entry;
    uint32_t file_size = strtol(entry->size, NULL, 8);
   
@@ -61,6 +68,8 @@ Tar_entry *tar_get_next_entry(Tar_entry *entry)
 
 uint32_t tar_get_nb_files(Tar_entry *init_entry)
 {
+   assert(init_entry != NULL);
+
    Tar_entry *current = init_entry;
    uint32_t nb_files = 0;
 

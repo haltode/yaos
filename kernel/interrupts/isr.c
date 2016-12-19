@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include <kernel/interrupts.h>
+#include <kernel/sys.h>
 
 #define NB_ISR_ROUTINES 32 
 
@@ -155,6 +156,7 @@ void fault_handler(Stack *registers)
       else
          puts(exception_messages[registers->id]);
 
-      for(;;);
+      for(;;)
+         sys_halt();
    }
 }

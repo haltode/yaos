@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -84,7 +85,7 @@ void *phys_mem_alloc_frame(void)
 
    /* Out of memory */
    if(!frame)
-      return 0;
+      return NULL;
 
    set_bit(mem_map, frame);
 
@@ -94,6 +95,8 @@ void *phys_mem_alloc_frame(void)
 
 void phys_mem_free_frame(void *ptr)
 {
+   assert(ptr != NULL);
+
    uint32_t address = (uint32_t) ptr;
    uint32_t frame = address / FRAME_SIZE;
 

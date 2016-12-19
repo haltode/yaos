@@ -1,4 +1,4 @@
-#include <stdbool.h>
+#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -20,14 +20,12 @@ void virt_mem_init(void)
 {
    /* Create the page directory */
    Page_dir *dir = (Page_dir *) phys_mem_alloc_frame();
-   if(!dir)
-      return;
+   assert(dir != NULL);
    memset(dir, 0, sizeof(Page_dir));
 
    /* Create the first page table */
    Page_table *identity_table = (Page_table *) phys_mem_alloc_frame();
-   if(!identity_table)
-      return;
+   assert(identity_table != NULL);
    memset(identity_table, 0, sizeof(Page_table));
 
    /* Identity map the first 4 MiB (our kernel starts at 1 MiB) */
@@ -58,20 +56,21 @@ void virt_mem_init(void)
  * Allocation/Deallocation
  */
 
-bool virt_mem_alloc_page(uint32_t *pt_entry)
+void virt_mem_alloc_page(uint32_t *pt_entry)
 {
+   assert(pt_entry != NULL);
+
    void *frame = phys_mem_alloc_frame();
-   if(!frame)
-      return false;
+   assert(frame != NULL);
 
    pt_entry_set_frame(pt_entry, (uint32_t)frame);
    pt_entry_add_flags(pt_entry, PTE_PRESENT_BIT);
-
-   return true;
 }
 
 void virt_mem_free_page(uint32_t *pt_entry)
 {
+   assert(pt_entry != NULL);
+
    void *frame = (void *) pt_entry_get_frame(*pt_entry);
    if(frame)
       phys_mem_free_frame(frame);
@@ -93,8 +92,7 @@ void virt_mem_map_page(void *physical, void *virtual)
    if((*pd_entry & PTE_PRESENT_BIT) != PTE_PRESENT_BIT) {
       /* The page table is not valid, we need to create one */
       Page_table *new_table = (Page_table *) phys_mem_alloc_frame();
-      if(!new_table)
-         return;
+      assert(new_table != NULL);
       memset(new_table, 0, sizeof(Page_table));
 
       /* Set up the new page directory entry */
@@ -158,6 +156,8 @@ Page_dir *virt_mem_get_dir(void)
 void virt_mem_setup_page_dir_entry( Page_dir *dir,
                                     Page_table *table, uint32_t address)
 {
+   assert(dir != NULL && table != NULL);
+
    uint32_t *pd_entry = &dir->entry[pd_index(address)];
    pd_entry_add_flags(pd_entry, PDE_PRESENT_BIT);
    pd_entry_add_flags(pd_entry, PDE_WRITABLE_BIT);
@@ -166,6 +166,8 @@ void virt_mem_setup_page_dir_entry( Page_dir *dir,
 
 void virt_mem_switch_page_dir(Page_dir *dir)
 {
+   assert(dir != NULL);
+
    current_dir = dir;
    current_dir_base_reg = (uint32_t) &dir->entry;
    load_page_directory();

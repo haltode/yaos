@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -64,16 +65,19 @@ void paging_setup(void)
 
 void pd_entry_add_flags(uint32_t *pd_entry, uint32_t flags)
 {
+   assert(pd_entry != NULL);
    *pd_entry |= flags;
 }
 
 void pd_entry_del_flags(uint32_t *pd_entry, uint32_t flags)
 {
+   assert(pd_entry != NULL);
    *pd_entry &= ~flags;
 }
 
 void pd_entry_set_frame(uint32_t *pd_entry, uint32_t address)
 {
+   assert(pd_entry != NULL);
    *pd_entry = (*pd_entry & ~PDE_FRAME_BIT) | address;
 }
 
@@ -99,6 +103,7 @@ uint32_t pd_index(uint32_t virt_addr)
 
 uint32_t pd_entry_phys_addr(uint32_t *pd_entry)
 {
+   assert(pd_entry != NULL);
    return *pd_entry & ~0xFFF;
 }
 
@@ -108,16 +113,19 @@ uint32_t pd_entry_phys_addr(uint32_t *pd_entry)
 
 void pt_entry_add_flags(uint32_t *pt_entry, uint32_t flags)
 {
+   assert(pt_entry != NULL);
    *pt_entry |= flags;
 }
 
 void pt_entry_del_flags(uint32_t *pt_entry, uint32_t flags)
 {
+   assert(pt_entry != NULL);
    *pt_entry &= ~flags;
 }
 
 void pt_entry_set_frame(uint32_t *pt_entry, uint32_t address)
 {
+   assert(pt_entry != NULL);
    *pt_entry = (*pt_entry & ~PTE_FRAME_BIT) | address;
 }
 

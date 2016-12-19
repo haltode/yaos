@@ -1,7 +1,6 @@
 #ifndef _KERNEL_MEMORY_H
 #define _KERNEL_MEMORY_H
 
-#include <stdbool.h>
 #include <stddef.h>
 
 #include <kernel/paging.h>
@@ -24,7 +23,7 @@ void phys_mem_free_frame(void *ptr);
 
 void virt_mem_init(void);
 
-bool virt_mem_alloc_page(uint32_t *pt_entry);
+void virt_mem_alloc_page(uint32_t *pt_entry);
 void virt_mem_free_page(uint32_t *pt_entry);
 
 void virt_mem_map_page(void *physical, void *virtual);
@@ -45,8 +44,9 @@ void *virt_mem_get_phys_addr(void *virtual);
  */
 
 /* The kernel heap is located at 512 MiB and expands to 1 GiB */
-#define KERNEL_HEAP_ADDR   0x20000000
-#define KERNEL_HEAP_SIZE   0x20000000
+#define KERNEL_HEAP_BASE_ADDR    0x20000000
+#define KERNEL_HEAP_TOP_ADDR     0x40000000
+#define KERNEL_HEAP_SIZE         0x20000000
 
 void heap_init(void);
 

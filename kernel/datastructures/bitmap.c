@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -13,16 +14,19 @@
 
 void set_bit(Bitmap *bitmap, uint32_t bit)
 {
+   assert((bit / 32) < bitmap->size);
    bitmap->address[bit / 32] |= (1 << (bit % 32));
 }
 
 void clear_bit(Bitmap *bitmap, uint32_t bit)
 {
+   assert((bit / 32) < bitmap->size);
    bitmap->address[bit / 32] &= ~ (1 << (bit % 32));
 }
 
 bool test_bit(Bitmap *bitmap, uint32_t bit)
 {
+   assert((bit / 32) < bitmap->size);
    return bitmap->address[bit / 32] & (1 << (bit % 32));
 }
 

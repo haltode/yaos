@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -8,21 +9,23 @@ uint32_t *kernel_heap_top;
 
 void heap_init(void)
 {
-   kernel_heap_top = (uint32_t *) KERNEL_HEAP_ADDR;
+   kernel_heap_top = (uint32_t *) KERNEL_HEAP_BASE_ADDR;
 }
 
 void *heap_expand(ptrdiff_t increment)
 {
-   /* TODO: check heap overflow */
+   assert(increment % FRAME_SIZE == 0);
 
    /* Expand the heap */
    if(increment >= 0) {
+      assert((uint32_t) kernel_heap_top + increment < KERNEL_HEAP_TOP_ADDR);
+
       uint32_t nb_pages = increment / FRAME_SIZE;   
       void *address = kernel_heap_top;
 
       for(size_t i = 0; i < nb_pages; ++i) {
          void *frame = phys_mem_alloc_frame();
-         /* TODO: check allocation */
+         assert(frame != NULL);
 
          virt_mem_map_page(frame, kernel_heap_top);
 
@@ -34,6 +37,8 @@ void *heap_expand(ptrdiff_t increment)
    }
    /* Contract the heap */
    else {
+      assert((uint32_t) kernel_heap_top - increment >= KERNEL_HEAP_BASE_ADDR);
+
       uint32_t nb_pages = (-increment) / FRAME_SIZE;
 
       for(size_t i = 0; i < nb_pages; ++i) {
