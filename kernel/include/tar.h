@@ -6,6 +6,14 @@
 
 #define TAR_ENTRY_SIZE 512
 
+#define FILE_TAR_TYPE            '0'
+#define HARD_LINK_TAR_TYPE       '1'
+#define SYM_LINK_TAR_TYPE        '2'
+#define CHAR_DEVICE_TAR_TYPE     '3'
+#define BLOCK_DEVICE_TAR_TYPE    '4'
+#define DIRECTORY_TAR_TYPE       '5'
+#define NAMED_PIPE_TAR_TYPE      '6'
+
 typedef struct tar_entry_t Tar_entry;
 struct tar_entry_t {
    char name[100];

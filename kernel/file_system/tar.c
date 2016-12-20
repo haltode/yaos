@@ -6,6 +6,8 @@
 
 #include <kernel/tar.h>
 
+/* TODO: Add more info about the tar extension */
+
 bool is_tar_entry_valid(Tar_entry *entry)
 {
    assert(entry != NULL);

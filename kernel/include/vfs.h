@@ -8,7 +8,7 @@ enum type_t { FILE_TYPE, DIRECTORY_TYPE };
 
 enum mode_t { CLOSED_MODE, READ_MODE, WRITE_MODE };
 
-typedef struct vfs_node_t vfs_node;
+typedef struct vfs_node_t Vfs_node;
 struct vfs_node_t {
    char name[128];
    uint32_t type;
@@ -19,22 +19,26 @@ struct vfs_node_t {
    uint32_t mode;
    size_t size;
 
-   void (*open) (vfs_node *file);
-   void (*close) (vfs_node *file);
-   uint32_t (*read) (vfs_node *file, uint32_t offset, size_t size, char *buffer);
-   uint32_t (*write) (vfs_node *file, uint32_t offset, size_t size, const char *buffer);
-   vfs_node *(*read_dir) (vfs_node *file, uint32_t index);
-   vfs_node *(*find_dir) (vfs_node *file, const char *path);
+   void (*open) (Vfs_node *file);
+   void (*close) (Vfs_node *file);
+   uint32_t (*read) (Vfs_node *file, uint32_t offset, size_t size, char *buffer);
+   uint32_t (*write) (Vfs_node *file, uint32_t offset, size_t size, const char *buffer);
+   Vfs_node *(*read_dir) (Vfs_node *dir, uint32_t index);
+   Vfs_node *(*find_dir) (Vfs_node *dir, const char *path);
 
    /* Used by mountpoints and symlinks */
-   vfs_node *ptr;
+   Vfs_node *ptr;
 };
 
 void vfs_init(void);
 
-void vfs_open(vfs_node *file);
-void vfs_close(vfs_node *file);
-uint32_t vfs_read(vfs_node *file, uint32_t offset, size_t size, char *buffer);
-uint32_t vfs_write(vfs_node *file, uint32_t offset, size_t size, const char *buffer);
+void vfs_open(Vfs_node *file);
+void vfs_close(Vfs_node *file);
+uint32_t vfs_read(Vfs_node *file, uint32_t offset, size_t size, char *buffer);
+uint32_t vfs_write(Vfs_node *file, uint32_t offset, size_t size, const char *buffer);
+Vfs_node *vfs_read_dir(Vfs_node *dir, uint32_t index);
+Vfs_node *vfs_find_dir(Vfs_node *dir, const char *path);
+
+uint32_t vfs_get_depth(const char *path);
 
 #endif
