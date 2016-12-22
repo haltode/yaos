@@ -38,6 +38,11 @@ void terminal_init(void)
    }
 }
 
+void terminal_set_color(uint8_t color)
+{
+   terminal_color = color;
+}
+
 static void terminal_movecursor(uint8_t x, uint8_t y)
 {
    uint16_t index = terminal_pos(x, y);
