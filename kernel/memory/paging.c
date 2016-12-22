@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include <kernel/interrupts.h>
+#include <kernel/log.h>
 #include <kernel/paging.h>
 
 /*
@@ -23,7 +24,8 @@ void page_fault_handler(Stack *registers)
    uint8_t user = registers->err_code & 0x4;
    uint8_t reserved = registers->err_code & 0x8;
 
-   printf("Page fault ( ");
+   kernel_log(ERROR_MSG, "Page fault");
+   printf("Details: ( ");
    if(present)    printf("present ");
    if(read_write) printf("read-only ");
    if(user)       printf("user-mode ");

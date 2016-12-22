@@ -8,4 +8,6 @@ void test_log(void)
    kernel_log(INFO_MSG, "This is an info: %d", x);
    kernel_log(WARNING_MSG, "This is a warning: 0x%x", x);
    kernel_log(ERROR_MSG, "This is an error: %s", str);
+
+   kernel_log(-1, "This is a message type test");
 }

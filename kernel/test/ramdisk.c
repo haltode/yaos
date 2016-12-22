@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <kernel/log.h>
 #include <kernel/ramdisk.h>
 #include <kernel/tar.h>
 #include <kernel/vfs.h>
@@ -31,7 +32,7 @@ void test_ramdisk(void)
          printf("\nContent: %s", buf);
       }
       else
-         printf("Error: Unknown file type '%d'\n", ramdisk_files[i].type);
+         kernel_log(ERROR_MSG, "Unknown file type: '%d'", ramdisk_files[i].type);
 
       printf("\n");
    }

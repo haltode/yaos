@@ -1,11 +1,11 @@
-#include <stdio.h>
-
 __attribute__((__noreturn__))
 void abort(void)
 {
 #ifdef __is_libk
+   #include <kernel/log.h>
    #include <kernel/sys.h>
-   printf("kernel panic: abort()\n");
+
+   kernel_log(ERROR_MSG, "Kernel panic");
    sys_disable_interrupts();
    sys_halt();
 #else

@@ -2,10 +2,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <kernel/log.h>
 #include <kernel/multiboot.h>
 #include <kernel/ramdisk.h>
 #include <kernel/tar.h>
@@ -88,7 +88,7 @@ void ramdisk_parse_files(void)
             ramdisk_files[i].type = DIRECTORY_TYPE;
             break;
          default:
-            printf("Error: Unknown tar file type '%c'\n", current->type[0]);
+            kernel_log(ERROR_MSG, "Unknown tar file type: '%c'", current->type[0]);
             break;
       }
 
