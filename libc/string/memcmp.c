@@ -1,9 +1,9 @@
-#include <string.h>
+#include <stddef.h>
 
-int memcmp(const void* aptr, const void* bptr, size_t size)
+int memcmp(const void *ptr1, const void *ptr2, size_t size)
 {
-   const unsigned char* a = (const unsigned char*) aptr;
-   const unsigned char* b = (const unsigned char*) bptr;
+   const unsigned char *a = (const unsigned char *) ptr1;
+   const unsigned char *b = (const unsigned char *) ptr2;
 
    for(size_t i = 0; i < size; ++i) {
       if(a[i] < b[i])

@@ -1,6 +1,6 @@
 #include <stddef.h>
 
-static void reverse(char* str, size_t length)
+static void reverse(char *str, size_t length)
 {
    size_t start, end;
    char tmp;
@@ -18,7 +18,7 @@ static void reverse(char* str, size_t length)
 }
 
 /* Convert an unsigned integer in a certain base to a string */
-char* utoa(unsigned int value, char* str, int base)
+char *utoa(unsigned int value, char *str, int base)
 {
    size_t i = 0;
 

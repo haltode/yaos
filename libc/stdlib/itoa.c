@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* Convert an integer in a certain base to a string */
-char* itoa(int value, char* str, int base)
+char *itoa(int value, char *str, int base)
 {
    bool is_negative = false;
    size_t i = 0;

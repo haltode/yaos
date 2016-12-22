@@ -2,6 +2,7 @@
 #define _ASSERT_H 1
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {

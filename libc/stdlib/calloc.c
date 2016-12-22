@@ -11,6 +11,6 @@ void *kcalloc(size_t num, size_t size)
 
 #else
 
-/* TODO: Implement system calls for calloc */
+/* TODO: Syscall */
 
 #endif

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 __attribute__((__noreturn__))
 void abort(void)
@@ -10,9 +9,9 @@ void abort(void)
    sys_disable_interrupts();
    sys_halt();
 #else
-   /* TODO: Implement syscall */
-   printf("abort()\n");
+   /* TODO: Syscall */
 #endif
+
    while(1);
    __builtin_unreachable();
 }

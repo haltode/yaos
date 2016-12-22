@@ -11,6 +11,6 @@ void *kmalloc(size_t size)
 
 #else
 
-/* TODO: Implement system calls for malloc */
+/* TODO: Syscall */
 
 #endif

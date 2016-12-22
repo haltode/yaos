@@ -1,13 +1,12 @@
-#include <stdio.h>
-
-int putchar(int ic)
+int putchar(int c)
 {
 #ifdef __is_libk
    #include <kernel/tty.h>
-   char c = (char) ic;
-   terminal_write(&c, sizeof(c));
+   char data = (char) c;
+   terminal_write(&data, sizeof(data));
 #else
-   /* TODO: Implement stdio and the write system call. */
+   /* TODO: Syscall */
 #endif
-   return ic;
+
+   return c;
 }

@@ -5,19 +5,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-static bool print(const char* data, size_t length)
+static bool print(char *data, size_t length)
 {
-   const unsigned char* bytes = (const unsigned char*) data;
+   unsigned char *bytes = (unsigned char *) data;
    for(size_t i = 0; i < length; ++i)
       if(putchar(bytes[i]) == EOF)
          return false;
    return true;
 }
 
-static bool isspecifier(const char c)
+static bool is_specifier(char c)
 {
-   static const char* specifiers = "dxcs%";
-   const size_t spec_len = strlen(specifiers);
+   static const char *specifiers = "dxcs%";
+   size_t spec_len = strlen(specifiers);
 
    for(size_t i = 0; i < spec_len; ++i)
       if(c == specifiers[i])
@@ -25,7 +25,7 @@ static bool isspecifier(const char c)
    return false;
 }
 
-int printf(const char* restrict format, ...)
+int printf(const char *format, ...)
 {
    va_list parameters;
    int written;
@@ -39,7 +39,7 @@ int printf(const char* restrict format, ...)
          ++i;
 
          /* Skip everything useless after the % (spaces, tab, etc.) */
-         while(format[i] != '\0' && !isspecifier(format[i])) {
+         while(format[i] != '\0' && !is_specifier(format[i])) {
             /* Unknown specifier */
             if(isalpha(format[i]))
                return -1;
@@ -83,7 +83,7 @@ int printf(const char* restrict format, ...)
          }
          /* string */
          else if(format[i] == 's') {
-            char* str = va_arg(parameters, char*);
+            char *str = va_arg(parameters, char*);
             size_t len = strlen(str);
             if(!print(str, len))
                return -1;

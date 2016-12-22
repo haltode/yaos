@@ -9,6 +9,6 @@ void kfree(void *ptr)
 
 #else
 
-/* TODO: Implement system calls for free */
+/* TODO: Syscall */
 
 #endif
