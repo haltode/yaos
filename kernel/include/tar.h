@@ -16,6 +16,9 @@
 
 typedef struct tar_entry_t Tar_entry;
 struct tar_entry_t {
+   /* Note: All fields containing numbers are stored in
+      base 8 using ASCII characters */
+
    char name[100];
    char mode[8];
    char uid[8];
@@ -26,9 +29,9 @@ struct tar_entry_t {
    char type[1];
 };
 
-bool is_tar_entry_valid(Tar_entry *entry);
 Tar_entry *tar_get_entry(Tar_entry *init_entry, uint32_t index);
 Tar_entry *tar_get_next_entry(Tar_entry *entry);
+bool is_tar_entry_valid(Tar_entry *entry);
 uint32_t tar_get_nb_files(Tar_entry *init_entry);
 
 #endif

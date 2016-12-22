@@ -11,11 +11,14 @@
 #include <kernel/tar.h>
 #include <kernel/vfs.h>
 
+extern Multiboot_info *boot_info;
+
 Vfs_node ramdisk;
 Vfs_node *ramdisk_files;
 uint32_t nb_ramdisk_files;
 
 Tar_entry *init_entry;
+
 
 /*
  * Setup
@@ -23,8 +26,6 @@ Tar_entry *init_entry;
 
 Vfs_node *ramdisk_init(void)
 {
-   extern Multiboot_info *boot_info;
-
    /* The init ramdisk (which is a tar archive) is loaded as a module by GRUB */
    uint32_t init_entry_addr = *((uint32_t *) boot_info->mods_addr);
    init_entry = (Tar_entry *) init_entry_addr;
@@ -91,9 +92,9 @@ void ramdisk_parse_files(void)
             break;
       }
 
-      current = tar_get_next_entry(current);
       ++i;
 
+      current = tar_get_next_entry(current);
       if(!current)
          break;
    }
@@ -112,10 +113,10 @@ uint32_t ramdisk_read(Vfs_node *file, uint32_t offset, size_t size, char *buffer
    memcpy(buffer, content, size);
    buffer[size] = '\0';
 
-   return size;
+   return (uint32_t) size;
 }
 
-/* Return the nth child of a directory */
+/* Return the child of a directory given the index */
 Vfs_node *ramdisk_read_dir(Vfs_node *dir, uint32_t index)
 {
    uint32_t dir_depth = vfs_get_depth(dir->name);

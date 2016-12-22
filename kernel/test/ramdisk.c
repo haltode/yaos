@@ -14,6 +14,7 @@ void test_ramdisk(void)
    extern uint32_t nb_ramdisk_files;
    extern Tar_entry *init_entry;
 
+   printf("nb_ramdisk_files: %d\n", nb_ramdisk_files);
    for(size_t i = 0; i < nb_ramdisk_files; ++i) {
       printf("Found '%s': ", ramdisk_files[i].name);
       if(ramdisk_files[i].type == DIRECTORY_TYPE)
