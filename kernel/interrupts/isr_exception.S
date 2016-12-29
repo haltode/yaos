@@ -73,6 +73,8 @@ ISR_NO_ERR 28
 ISR_NO_ERR 29
 ISR_NO_ERR 30
 ISR_NO_ERR 31
+/* Syscall */
+ISR_NO_ERR 128
 
 /* This is our common ISR stub. It saves the processor state, sets 
    up for kernel mode segments, calls the C-level fault handler, 

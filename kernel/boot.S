@@ -62,6 +62,5 @@ loader:
    call kernel_main
 
    /* Hang if kernel_main unexpectedly returns */
-   cli
-1: hlt
+1:
    jmp 1b

@@ -7,8 +7,10 @@
 #include <kernel/memory.h>
 #include <kernel/multiboot.h>
 #include <kernel/sys.h>
+#include <kernel/syscall.h>
 #include <kernel/timer.h>
 #include <kernel/tty.h>
+#include <kernel/user_space.h>
 #include <kernel/vfs.h>
 
 Multiboot_info *boot_info;
@@ -47,10 +49,11 @@ void kernel_main(Multiboot_info *args)
    kernel_log(INFO_MSG, "Virtual file system initialized");
    
    puts("");
-   puts("Hello kernel World!");
+   puts("Hello kernel world!");
 
-   /* Make sure the main function doesn't exit prematurely 
-      (Otherwise it disables interrupts) */
-   for(;;)
-      sys_halt();
+   syscall_init();
+   enter_user_space();
+
+   puts("");
+   puts("Hello user world!");
 }

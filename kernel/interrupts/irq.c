@@ -41,11 +41,7 @@ extern void irq15(void);
 
 /* This array is actually an array of function pointers. We use 
    this to handle custom IRQ handlers for a given IRQ */
-void *irq_routines[NB_IRQ_ROUTINES] =
-{
-   0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0
-};
+void *irq_routines[NB_IRQ_ROUTINES] = {0};
 
 /* Install a custom IRQ handler for the given IRQ */
 void irq_install_handler(uint8_t irq, void (*handler)(Stack *registers))

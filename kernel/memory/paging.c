@@ -25,6 +25,7 @@ void page_fault_handler(Stack *registers)
    uint8_t reserved = registers->err_code & 0x8;
 
    kernel_log(ERROR_MSG, "Page fault");
+   printf("Error code: 0x%x\n", registers->err_code);
    printf("Details: ( ");
    if(present)    printf("present ");
    if(read_write) printf("read-only ");

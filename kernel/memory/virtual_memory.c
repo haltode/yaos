@@ -34,6 +34,8 @@ void virt_mem_init(void)
       uint32_t *page = &identity_table->entry[i];
       pt_entry_set_frame(page, phys_addr);
       pt_entry_add_flags(page, PTE_PRESENT_BIT);
+      pt_entry_add_flags(page, PTE_WRITABLE_BIT);
+      pt_entry_add_flags(page, PTE_USER_BIT);
 
       phys_addr += PAGE_SIZE;
    }
@@ -45,6 +47,7 @@ void virt_mem_init(void)
    uint32_t *pd_last_entry = &dir->entry[ENTRY_PER_DIR - 1];
    pd_entry_add_flags(pd_last_entry, PDE_PRESENT_BIT);
    pd_entry_add_flags(pd_last_entry, PDE_WRITABLE_BIT);
+   pd_entry_add_flags(pd_last_entry, PDE_USER_BIT);
    pd_entry_set_frame(pd_last_entry, (uint32_t)dir);
 
    virt_mem_switch_page_dir(dir); 
@@ -161,6 +164,7 @@ void virt_mem_setup_page_dir_entry( Page_dir *dir,
    uint32_t *pd_entry = &dir->entry[pd_index(address)];
    pd_entry_add_flags(pd_entry, PDE_PRESENT_BIT);
    pd_entry_add_flags(pd_entry, PDE_WRITABLE_BIT);
+   pd_entry_add_flags(pd_entry, PDE_USER_BIT);
    pd_entry_set_frame(pd_entry, (uint32_t)table);
 }
 

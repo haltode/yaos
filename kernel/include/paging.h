@@ -6,10 +6,12 @@
 
 #define PDE_PRESENT_BIT       0x1
 #define PDE_WRITABLE_BIT      0x2
+#define PDE_USER_BIT          0x4
 #define PDE_FRAME_BIT         0x7FFFF000
 
 #define PTE_PRESENT_BIT       0x1
 #define PTE_WRITABLE_BIT      0x2
+#define PTE_USER_BIT          0x4
 #define PTE_FRAME_BIT         0x7FFFF000
 
 #define ENTRY_PER_TABLE 1024
