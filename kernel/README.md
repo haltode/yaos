@@ -64,6 +64,13 @@ Here are a few resources that helped me create the kernel.
    - [Bran's Kernel Development - IRQs and PICs](http://www.osdever.net/bkerndev/Docs/irqs.htm)
    - [OSDev.org - PIC](http://wiki.osdev.org/PIC)
 
+### User space
+
+- [James Molloy - User mode (and syscalls)](http://knusbaum.inlisp.org/jamesmolloy/tutorial_html/10.-User%20Mode.html)
+- [Operating Systems Development - User land](http://www.brokenthorn.com/Resources/OSDev23.html)
+- [OSDev.org - Getting to Ring 3](http://wiki.osdev.org/Getting_to_Ring_3#Entering_Ring_3)
+- [CPU Rings, Privilege, and Protection](http://duartes.org/gustavo/blog/post/cpu-rings-privilege-and-protection/)
+
 ### File system
 
 - [OSDev.org - File Systems](http://wiki.osdev.org/File_Systems)
