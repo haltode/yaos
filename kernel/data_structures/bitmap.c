@@ -8,7 +8,7 @@
 #include <kernel/memory.h>
 
 /*
- * This bitmap datastructure is used to represent physical memory,
+ * This bitmap data structure is used to represent physical memory,
  * where each bit corresponds to a frame (4 KiB).
  */
 
