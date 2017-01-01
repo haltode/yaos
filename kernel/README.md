@@ -22,6 +22,7 @@ Here are a few resources that helped me create the kernel.
 
    - [OSDev.org - Memory Management](http://wiki.osdev.org/Memory_Management)
    - [OSDev.org - Paging](http://wiki.osdev.org/Paging)
+   - [OSDev.org - Page Fault](http://wiki.osdev.org/Page_Fault)
    - [x86 Paging Tutorial](http://www.cirosantilli.com/x86-paging/)
    - *(French)* [Gérer la mémoire - un noyau qui implémente la pagination](http://a.michelizza.free.fr/pmwiki.php?n=TutoOS.Mm)
    - [How to make an OS - Theory: physical and virtual memory](https://samypesse.gitbooks.io/how-to-create-an-operating-system/content/Chapter-8/)
