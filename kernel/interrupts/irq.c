@@ -4,23 +4,6 @@
 #include <kernel/io.h>
 #include <kernel/sys.h>
 
-#define NB_IRQ_ROUTINES 16
-
-#define PIC1         0x20 /* master PIC */
-#define PIC2         0xA0 /* slave PIC */
-#define PIC1_CMD     PIC1
-#define PIC1_DATA    (PIC1 + 1)
-#define PIC2_CMD     PIC2
-#define PIC2_DATA    (PIC2 + 1)
-#define PIC1_OFFSET  0x20
-#define PIC2_OFFSET  0x28
-
-#define PIC_EOI 0x20
-
-#define ICW1_ICW4 0x01
-#define ICW1_INIT 0x10
-#define ICW4_8086 0x01
-
 /* IRQ (Interrupt Requests) */
 extern void irq0(void);
 extern void irq1(void);

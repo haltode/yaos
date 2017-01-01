@@ -22,7 +22,6 @@ static void gdt_set_entry(uint8_t num, uint32_t base, uint32_t limit, uint8_t ac
    gdt[num].granularity |= (granularity & 0xF0);
 
    gdt[num].access = access;
-   /* printf("%d: 0x%x%x%x%x%x%x\n", num, gdt[num].limit_low, gdt[num].base_low, gdt[num].base_middle, gdt[num].access, gdt[num].granularity, gdt[num].base_high); */
 }
 
 static void tss_install(uint8_t num, uint16_t kernel_ss, uint16_t kernel_esp)

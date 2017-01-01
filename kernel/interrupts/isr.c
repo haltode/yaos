@@ -3,8 +3,6 @@
 #include <kernel/interrupts.h>
 #include <kernel/sys.h>
 
-#define NB_ISR_ROUTINES 256
-
 /* ISR (Interrupt Service Routines) */
 extern void isr0(void);
 extern void isr1(void);

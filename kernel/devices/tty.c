@@ -6,11 +6,6 @@
 #include <kernel/io.h>
 #include <kernel/vga.h>
 
-#define VGA_CMD   0x3D4
-#define VGA_DATA  0x3D5
-
-static const uint8_t VGA_WIDTH = 80;
-static const uint8_t VGA_HEIGHT = 25;
 static uint16_t* const VGA_MEMORY = (uint16_t *) 0xB8000;
 
 static uint8_t terminal_row;

@@ -3,6 +3,12 @@
 
 #include <stdint.h>
 
+#define VGA_CMD      0x3D4
+#define VGA_DATA     0x3D5
+
+#define VGA_WIDTH    80
+#define VGA_HEIGHT   25
+
 typedef enum vga_color_t Vga_color;
 enum vga_color_t {
    VGA_COLOR_BLACK         = 0,

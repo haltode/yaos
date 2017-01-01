@@ -4,13 +4,7 @@
 
 #include <kernel/interrupts.h>
 #include <kernel/io.h>
-
-#define KEYBOARD_DATA 0x60
-
-#define LSHIFT 0x29
-#define RSHIFT 0x35
-#define CTRL   0x1C
-#define ALT    0x37
+#include <kernel/keyboard.h>
 
 /* US keyboard layout */
 unsigned char us_layout[] = {

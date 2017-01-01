@@ -2,9 +2,7 @@
 
 #include <kernel/interrupts.h>
 #include <kernel/io.h>
-
-#define COMMAND_REG  0x43
-#define DATA_REG1    0x40
+#include <kernel/timer.h>
 
 /* We need to use the 'volatile' keyword to prevent
    the compiler from optimizing the variable */
