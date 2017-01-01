@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include <kernel/interrupts.h>
+#include <kernel/log.h>
 #include <kernel/sys.h>
 
 /* ISR (Interrupt Service Routines) */
@@ -140,16 +141,15 @@ void fault_handler(Stack *registers)
 {
    /* We only use the first 32 ISR */
    if(registers->id < 32) {
-      printf("Exception. System Halted! (error code: 0x%x)\n", registers->err_code);
+      kernel_log(ERROR_MSG, "Exception. System Halted!");
+      printf("Error code: 0x%x\n", registers->err_code);
+      puts(exception_messages[registers->id]);
 
       /* Find out if we have a custom handler to run for this ISR and run it */
       void (*handler)(Stack *registers);
       handler = isr_routines[registers->id];
       if(handler)
          handler(registers);
-      /* If we don't, print the exception's corresponding message */
-      else
-         puts(exception_messages[registers->id]);
 
       for(;;)
          sys_halt();
