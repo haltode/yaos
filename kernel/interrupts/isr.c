@@ -43,7 +43,6 @@ extern void isr128(void);
    this to handle custom ISR handlers for a given ISR */
 void *isr_routines[NB_ISR_ROUTINES] = {0};
 
-/* Install a custom ISR handler for the given ISR */
 void isr_install_handler(uint8_t isr, void (*handler)(Stack *registers))
 {
    isr_routines[isr] = handler;

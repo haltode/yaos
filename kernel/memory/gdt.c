@@ -59,11 +59,9 @@ void gdt_install(void)
    /* Task state register (TSS) */
    tss_install(5, 0x10, 0x0);
 
-   /* Setup our GDT pointer */
    gdt_ptr.limit = (sizeof(Gdt_entry) * NB_GDT_ENTRY) - 1;
    gdt_ptr.base = (uint32_t) &gdt;
 
-   /* Flush out the old GDT and install the new one */
    gdt_flush();
    tss_flush();
 }

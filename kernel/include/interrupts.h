@@ -94,6 +94,7 @@ void isr_install(void);
 
 void irq_install_handler(uint8_t irq, void (*handler)(Stack *registers));
 void irq_uninstall_handler(uint8_t irq);
+void irq_call_handler(Stack *registers);
 void irq_install(void);
 
 #endif

@@ -18,10 +18,10 @@ void page_fault_handler(Stack *registers)
    asm ("mov %%cr2, %0" : "=r" (faulting_address));
 
    /* The error code gives us details of what happened */
-   uint8_t present = !(registers->err_code & 0x1);
+   uint8_t present    = !(registers->err_code & 0x1);
    uint8_t read_write = registers->err_code & 0x2;
-   uint8_t user = registers->err_code & 0x4;
-   uint8_t reserved = registers->err_code & 0x8;
+   uint8_t user       = registers->err_code & 0x4;
+   uint8_t reserved   = registers->err_code & 0x8;
 
    printf("Details: ( ");
    if(present)    printf("present ");
@@ -33,7 +33,6 @@ void page_fault_handler(Stack *registers)
 
 void paging_setup(void)
 {
-   /* Add a custom ISR handler for the 'Page Fault' exception */
    isr_install_handler(14, page_fault_handler);
 }
 

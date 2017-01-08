@@ -26,7 +26,6 @@ extern void irq15(void);
    this to handle custom IRQ handlers for a given IRQ */
 void *irq_routines[NB_IRQ_ROUTINES] = {0};
 
-/* Install a custom IRQ handler for the given IRQ */
 void irq_install_handler(uint8_t irq, void (*handler)(Stack *registers))
 {
    irq_routines[irq] = handler;
@@ -37,13 +36,21 @@ void irq_uninstall_handler(uint8_t irq)
    irq_routines[irq] = 0;
 }
 
-/* Normally, IRQs 0 to 7 are mapped to entries 8 to 15. This is a problem
-   in protected mode, because IDT entry 8 is a Double Fault!
-   Without remapping, every time IRQ0 fires, you get a Double Fault
-   Exception, which is NOT actually what's happening. 
+void irq_call_handler(Stack *registers)
+{
+   void (*handler)(Stack *registers);
+   handler = irq_routines[registers->id - 32];
+   if(handler)
+      handler(registers);
+}
+
+/* Normally, IRQs 0 to 7 are mapped to entries 8 to 15. This is 
+   a problem in protected mode, because IDT entry 8 is a Double
+   Fault! Without remapping, every time IRQ0 fires, you get a 
+   Double Fault Exception, which is NOT actually what's happening. 
    We send commands to the Programmable Interrupt Controller 
-   (PICs - also called the 8259's) in order to make IRQ0 to 15 be
-   remapped to IDT entries 32 to 47 */
+   (PICs) in order to make IRQ0 to 15 be remapped to IDT entries
+   32 to 47 */
 static void irq_remap(void)
 {
    /* Cascade initialization */
@@ -73,7 +80,6 @@ static void irq_remap(void)
 
 void irq_install(void)
 {
-   /* Remap the interrupt controllers */
    irq_remap();
 
    /* Install the ISRs */
@@ -110,13 +116,7 @@ void irq_install(void)
    an EOI, you won't raise any more IRQs */
 void irq_handler(Stack *registers)
 {
-   /* This is a blank function pointer */
-   void (*handler)(Stack *registers);
-
-   /* Find out if we have a custom handler to run for this IRQ and run it */
-   handler = irq_routines[registers->id - 32];
-   if(handler)
-      handler(registers);
+   irq_call_handler(registers); 
 
    /* If the IDT entry that was invoked was greater than 40
       (meaning IRQ8 - IRQ15), then we need to send an EOI to
