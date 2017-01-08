@@ -11,6 +11,11 @@ void *kmalloc(size_t size)
 
 #else
 
-/* TODO: Syscall */
+#include <sys.h>
+
+void *malloc(size_t size)
+{
+   return syscall(MALLOC_SYSCALL, (int) size, 0, 0);
+}
 
 #endif

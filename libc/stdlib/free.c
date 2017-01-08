@@ -9,6 +9,11 @@ void kfree(void *ptr)
 
 #else
 
-/* TODO: Syscall */
+#include <sys.h>
+
+void free(void *ptr)
+{
+   syscall(FREE_SYSCALL, (int) ptr, 0, 0);
+}
 
 #endif

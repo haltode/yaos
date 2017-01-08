@@ -2,13 +2,20 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <kernel/doug_lea.h>
 #include <kernel/interrupts.h>
+#include <kernel/sys.h>
 #include <kernel/syscall.h>
+#include <kernel/tty.h>
 
-#define NB_SYSCALL 1
+#define NB_SYSCALL 5
 
 void *syscalls[NB_SYSCALL] = {
-   printf 
+   terminal_write,
+   DougLea_malloc,
+   DougLea_free,
+   DougLea_calloc,
+   sys_halt
 };
 
 void syscall_handler(Stack *registers)

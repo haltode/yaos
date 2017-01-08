@@ -1,11 +1,13 @@
 int putchar(int c)
 {
+   char data = (char) c;
+
 #ifdef __is_libk
    #include <kernel/tty.h>
-   char data = (char) c;
    terminal_write(&data, sizeof(data));
 #else
-   /* TODO: Syscall */
+   #include <sys.h>
+   syscall(PUTCHAR_SYSCALL, (int) &data, (int) sizeof(data), 0);
 #endif
 
    return c;

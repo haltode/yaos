@@ -9,7 +9,8 @@ void abort(void)
    sys_disable_interrupts();
    sys_halt();
 #else
-   /* TODO: Syscall */
+   #include <sys.h>
+   syscall(ABORT_SYSCALL, 0, 0, 0);
 #endif
 
    while(1);

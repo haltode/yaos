@@ -11,6 +11,11 @@ void *kcalloc(size_t num, size_t size)
 
 #else
 
-/* TODO: Syscall */
+#include <sys.h>
+
+void *calloc(size_t num, size_t size)
+{
+   return syscall(CALLOC_SYSCALL, (int) num, (int) size, 0);
+}
 
 #endif
