@@ -54,6 +54,14 @@ void isr_uninstall_handler(uint8_t isr)
    isr_routines[isr] = 0;
 }
 
+void isr_call_handler(Stack *registers)
+{
+   void (*handler)(Stack *registers);
+   handler = isr_routines[registers->id];
+   if(handler)
+      handler(registers);
+}
+
 void isr_install(void)
 {
    idt_set_entry(0, (uint32_t)isr0, 0x08, 0x8E);
@@ -92,7 +100,7 @@ void isr_install(void)
    idt_set_entry(30, (uint32_t)isr30, 0x08, 0x8E);
    idt_set_entry(31, (uint32_t)isr31, 0x08, 0x8E);
 
-   idt_set_entry(0x80, (uint32_t)isr128, 0x08, 0x8E);
+   idt_set_entry(128, (uint32_t)isr128, 0x08, 0x8E);
 }
 
 static const char *exception_messages[] =
@@ -139,17 +147,17 @@ static const char *exception_messages[] =
     structures */
 void fault_handler(Stack *registers)
 {
-   /* We only use the first 32 ISR */
+   /* Special case: syscall */
+   if(registers->id == 128)
+      isr_call_handler(registers);
+
+   /* Otherwise, we only use the first 32 ISR */
    if(registers->id < 32) {
       kernel_log(ERROR_MSG, "Exception. System Halted!");
       printf("Error code: 0x%x\n", registers->err_code);
       puts(exception_messages[registers->id]);
 
-      /* Find out if we have a custom handler to run for this ISR and run it */
-      void (*handler)(Stack *registers);
-      handler = isr_routines[registers->id];
-      if(handler)
-         handler(registers);
+      isr_call_handler(registers);
 
       for(;;)
          sys_halt();

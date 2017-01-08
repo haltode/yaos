@@ -6,7 +6,6 @@ void enter_user_space(void)
                   mov %ax, %es;     \
                   mov %ax, %fs;     \
                   mov %ax, %gs;     \
-                                    \
                   mov %esp, %eax;   \
                   pushl $0x23;      \
                   pushl %eax;       \

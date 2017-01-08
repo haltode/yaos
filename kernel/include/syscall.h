@@ -4,6 +4,5 @@
 #include <kernel/interrupts.h>
 
 void syscall_init(void);
-void syscall_handler(Stack *registers);
 
 #endif

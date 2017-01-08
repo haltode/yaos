@@ -68,6 +68,7 @@ void idt_install(void);
 
 void isr_install_handler(uint8_t isr, void (*handler)(Stack *registers));
 void isr_uninstall_handler(uint8_t isr);
+void isr_call_handler(Stack *registers);
 void isr_install(void);
 
 /*

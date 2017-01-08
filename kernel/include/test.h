@@ -9,4 +9,6 @@ void test_doug_lea(void);
 
 void test_ramdisk(void);
 
+void test_syscall(void);
+
 #endif
