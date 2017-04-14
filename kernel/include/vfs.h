@@ -32,7 +32,7 @@ struct vfs_node_t {
 
 void vfs_init(void);
 
-void vfs_open(Vfs_node *file);
+Vfs_node *vfs_open(const char *path, const char *mode);
 void vfs_close(Vfs_node *file);
 uint32_t vfs_read(Vfs_node *file, uint32_t offset, size_t size, char *buffer);
 uint32_t vfs_write(Vfs_node *file, uint32_t offset, size_t size, const char *buffer);

@@ -82,6 +82,7 @@ LIBK_OBJS = $(LIBC_OBJS:.o=.libk.o)
 all: yaos
 
 yaos: prepare_sysroot $(LIBK_BIN) $(KERNEL_BIN)
+	scripts/setup_initrd.sh
 	scripts/setup_iso.sh
 
 prepare_sysroot:
