@@ -4,6 +4,8 @@
 
 CURDIR = $(shell pwd)
 
+CONFIG = $(CURDIR)/config
+
 # Main destination directories
 SYSROOT         = $(CURDIR)/sysroot
 SYSROOT_BOOT    = $(SYSROOT)/boot
@@ -164,6 +166,7 @@ clean_libk:
 	rm -f $(LIBK_OBJS:.libk.o=.libk.d)
 
 clean: clean_kernel clean_libc clean_libk
+	rm -fv $(CONFIG)/initrd.tar
 	rm -rfv $(SYSROOT)
 	rm -rfv isodir
 	rm -rfv yaos.iso
