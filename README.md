@@ -41,6 +41,10 @@ TODO: insert images
 - [Intel 80386 Reference Programmer's Manual](https://pdos.csail.mit.edu/6.828/2005/readings/i386/toc.htm)
 - [osdever.net](http://www.osdever.net/tutorials/)
 - [The little book about OS development](https://littleosbook.github.io/)
+- [/r/osdev/](https://www.reddit.com/r/osdev/)
+- [basekernel](https://github.com/dthain/basekernel)
+- [os5](https://github.com/thomasloven/os5)
+- [axle](https://github.com/codyd51/axle)
 
 ## License
 

@@ -34,6 +34,7 @@ Here are a few resources that helped me create the kernel.
    - [Operating Systems Development - Physical Memory](http://www.brokenthorn.com/Resources/OSDev17.html)
    - [osdever.net - Memory Management 1](http://www.osdever.net/tutorials/view/memory-management-1)
    - [OSDev.org - Detecting Memory](http://wiki.osdev.org/Detecting_Memory_(x86))
+   - [OSDEV: Implementing a basic x86 page frame allocator in C](https://anastas.io/osdev/memory/2016/08/08/page-frame-allocator.html)
 
 - Virtual memory
 
