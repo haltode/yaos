@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <kernel/memory.h>
+#include <kernel/paging.h>
 
 uint32_t *kernel_heap_top;
 
@@ -27,7 +28,7 @@ void *heap_expand(ptrdiff_t increment)
          void *frame = phys_mem_alloc_frame();
          assert(frame != NULL);
 
-         virt_mem_map_page(frame, kernel_heap_top);
+         virt_mem_map_page(frame, kernel_heap_top, TABLE_PRESENT_BIT | TABLE_WRITABLE_BIT);
 
          memset(kernel_heap_top, 0, FRAME_SIZE);
          kernel_heap_top = (uint32_t *) ((uint32_t) kernel_heap_top + FRAME_SIZE);

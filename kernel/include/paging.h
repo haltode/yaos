@@ -4,18 +4,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define PDE_PRESENT_BIT       0x1
-#define PDE_WRITABLE_BIT      0x2
-#define PDE_USER_BIT          0x4
-#define PDE_FRAME_BIT         0x7FFFF000
-
-#define PTE_PRESENT_BIT       0x1
-#define PTE_WRITABLE_BIT      0x2
-#define PTE_USER_BIT          0x4
-#define PTE_FRAME_BIT         0x7FFFF000
+#define TABLE_PRESENT_BIT     0x1
+#define TABLE_WRITABLE_BIT    0x2
+#define TABLE_USER_BIT        0x4
+#define TABLE_FRAME_BIT       0x7FFFF000
 
 #define ENTRY_PER_TABLE 1024
-#define ENTRY_PER_DIR   1024
 
 /* 4 KiB */
 #define PAGE_SIZE 4096
@@ -32,9 +26,10 @@ void paging_setup(void);
 
 typedef struct page_dir_t Page_dir;
 struct page_dir_t {
-   uint32_t entry[ENTRY_PER_DIR];
+   uint32_t entry[ENTRY_PER_TABLE];
 };
 
+Page_dir *create_page_dir(void);
 void pd_entry_add_flags(uint32_t *pd_entry, uint32_t flags);
 void pd_entry_del_flags(uint32_t *pd_entry, uint32_t flags);
 void pd_entry_set_frame(uint32_t *pd_entry, uint32_t address);
@@ -53,6 +48,7 @@ struct page_table_t {
    uint32_t entry[ENTRY_PER_TABLE];
 };
 
+Page_table *create_page_table(void);
 void pt_entry_add_flags(uint32_t *pt_entry, uint32_t flags);
 void pt_entry_del_flags(uint32_t *pt_entry, uint32_t flags);
 void pt_entry_set_frame(uint32_t *pt_entry, uint32_t address);

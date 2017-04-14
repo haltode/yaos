@@ -3,8 +3,10 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <kernel/interrupts.h>
+#include <kernel/memory.h>
 #include <kernel/paging.h>
 
 /*
@@ -62,6 +64,16 @@ void paging_setup(void)
  * Page directory
  */
 
+Page_dir *create_page_dir(void)
+{
+   Page_dir *new_dir = (Page_dir *) phys_mem_alloc_frame();
+   assert(new_dir != NULL);
+
+   memset(new_dir, 0, sizeof(Page_dir));
+
+   return new_dir;
+}
+
 void pd_entry_add_flags(uint32_t *pd_entry, uint32_t flags)
 {
    assert(pd_entry != NULL);
@@ -77,22 +89,22 @@ void pd_entry_del_flags(uint32_t *pd_entry, uint32_t flags)
 void pd_entry_set_frame(uint32_t *pd_entry, uint32_t address)
 {
    assert(pd_entry != NULL);
-   *pd_entry = (*pd_entry & ~PDE_FRAME_BIT) | address;
+   *pd_entry = (*pd_entry & ~TABLE_FRAME_BIT) | address;
 }
 
 uint32_t pd_entry_get_frame(uint32_t pd_entry)
 {
-   return pd_entry & PDE_FRAME_BIT;
+   return pd_entry & TABLE_FRAME_BIT;
 }
 
 bool pd_entry_is_present(uint32_t pd_entry)
 {
-   return pd_entry & PDE_PRESENT_BIT;
+   return pd_entry & TABLE_PRESENT_BIT;
 }
 
 bool pd_entry_is_writable(uint32_t pd_entry)
 {
-   return pd_entry & PDE_WRITABLE_BIT;
+   return pd_entry & TABLE_WRITABLE_BIT;
 }
 
 uint32_t pd_index(uint32_t virt_addr)
@@ -110,6 +122,16 @@ uint32_t pd_entry_phys_addr(uint32_t *pd_entry)
  * Page table
  */
 
+Page_table *create_page_table(void)
+{
+   Page_table *new_page_table = (Page_table *) phys_mem_alloc_frame();
+   assert(new_page_table != NULL);
+
+   memset(new_page_table, 0, sizeof(Page_table));
+
+   return new_page_table;
+}
+
 void pt_entry_add_flags(uint32_t *pt_entry, uint32_t flags)
 {
    assert(pt_entry != NULL);
@@ -125,22 +147,22 @@ void pt_entry_del_flags(uint32_t *pt_entry, uint32_t flags)
 void pt_entry_set_frame(uint32_t *pt_entry, uint32_t address)
 {
    assert(pt_entry != NULL);
-   *pt_entry = (*pt_entry & ~PTE_FRAME_BIT) | address;
+   *pt_entry = (*pt_entry & ~TABLE_FRAME_BIT) | address;
 }
 
 uint32_t pt_entry_get_frame(uint32_t pt_entry)
 {
-   return pt_entry & PTE_FRAME_BIT;
+   return pt_entry & TABLE_FRAME_BIT;
 }
 
 bool pt_entry_is_present(uint32_t pt_entry)
 {
-   return pt_entry & PTE_PRESENT_BIT;
+   return pt_entry & TABLE_PRESENT_BIT;
 }
 
 bool pt_entry_is_writable(uint32_t pt_entry)
 {
-   return pt_entry & PTE_WRITABLE_BIT;
+   return pt_entry & TABLE_WRITABLE_BIT;
 }
 
 uint32_t pt_index(uint32_t virt_addr)
