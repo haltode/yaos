@@ -4,17 +4,21 @@
 
 #include <kernel/doug_lea.h>
 #include <kernel/interrupts.h>
+#include <kernel/keyboard.h>
 #include <kernel/sys.h>
 #include <kernel/syscall.h>
 #include <kernel/tty.h>
 
-#define NB_SYSCALL 5
+#define NB_SYSCALL 6
 
 void *syscalls[NB_SYSCALL] = {
    terminal_write,
+   keyboard_getchar,
+
    DougLea_malloc,
    DougLea_free,
    DougLea_calloc,
+
    sys_halt
 };
 

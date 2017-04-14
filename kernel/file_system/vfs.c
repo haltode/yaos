@@ -22,7 +22,7 @@ void vfs_init(void)
  * Basic operations
  */
 
-static Vfs_node *vfs_search_file(Vfs_node *parent, const char *path)
+Vfs_node *vfs_search_node(Vfs_node *parent, const char *path)
 {
    assert(parent != NULL);
    
@@ -33,7 +33,7 @@ static Vfs_node *vfs_search_file(Vfs_node *parent, const char *path)
          return child;
 
       if(child->type == DIRECTORY_TYPE) {
-         Vfs_node *recursive_child = vfs_search_file(child, path);
+         Vfs_node *recursive_child = vfs_search_node(child, path);
          if(recursive_child != NULL)
             return recursive_child;
       }
@@ -46,7 +46,7 @@ static Vfs_node *vfs_search_file(Vfs_node *parent, const char *path)
 
 Vfs_node *vfs_open(const char *path, const char *mode)
 {
-   Vfs_node *file = vfs_search_file(root, path);
+   Vfs_node *file = vfs_search_node(root, path);
    assert(file != NULL);
    assert(file->type == FILE_TYPE);
 
@@ -117,6 +117,11 @@ Vfs_node *vfs_find_dir(Vfs_node *dir, const char *path)
 /*
  * Miscellaneous
  */
+
+Vfs_node *vfs_get_root(void)
+{
+   return root;
+}
 
 /* Count number of '/' in the file's name to deduct the depth */
 uint32_t vfs_get_depth(const char *path)

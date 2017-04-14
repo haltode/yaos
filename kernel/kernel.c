@@ -6,6 +6,7 @@
 #include <kernel/log.h>
 #include <kernel/memory.h>
 #include <kernel/multiboot.h>
+#include <kernel/shell.h>
 #include <kernel/sys.h>
 #include <kernel/syscall.h>
 #include <kernel/timer.h>
@@ -56,4 +57,6 @@ void kernel_main(Multiboot_info *args)
 
    puts("");
    puts("Hello user world!");
+
+   shell_init();
 }

@@ -32,6 +32,7 @@ struct vfs_node_t {
 
 void vfs_init(void);
 
+Vfs_node *vfs_search_node(Vfs_node *parent, const char *path);
 Vfs_node *vfs_open(const char *path, const char *mode);
 void vfs_close(Vfs_node *file);
 uint32_t vfs_read(Vfs_node *file, uint32_t offset, size_t size, char *buffer);
@@ -39,6 +40,7 @@ uint32_t vfs_write(Vfs_node *file, uint32_t offset, size_t size, const char *buf
 Vfs_node *vfs_read_dir(Vfs_node *dir, uint32_t index);
 Vfs_node *vfs_find_dir(Vfs_node *dir, const char *path);
 
+Vfs_node *vfs_get_root(void);
 uint32_t vfs_get_depth(const char *path);
 
 #endif

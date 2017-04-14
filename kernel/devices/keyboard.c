@@ -1,6 +1,5 @@
-#include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
 
 #include <kernel/interrupts.h>
 #include <kernel/io.h>
@@ -108,11 +107,29 @@ unsigned char us_layout[] = {
    0xFF, 0xFF, 0xFF, 0xFF  /* (0x61) */
 };
 
-void keyboard_handler(Stack *registers)
-{
-   /* Unused parameter (avoid a warning) */
-   (void)(registers);
+/* Input buffer */
+volatile unsigned char buffer[KEYBOARD_BUFFER_SIZE];
+volatile size_t buffer_index;
+volatile size_t read_index;
 
+void keyboard_clear_buffer(void)
+{
+   buffer_index = 0;
+   read_index = 0;
+}
+
+int keyboard_getchar(void)
+{
+   /* We wait for another character */
+   while(read_index == buffer_index); 
+
+   int c = (int) buffer[read_index];
+   ++read_index;
+   return c;
+}
+
+unsigned char keyboard_getscancode(void)
+{
    uint8_t scancode;
    uint16_t index;
    static uint8_t offset = 0;
@@ -135,10 +152,10 @@ void keyboard_handler(Stack *registers)
          case ALT:
             offset = 3;
             break;
+         /* Character */
          default:
             index = scancode * 4 + offset;
-            putchar(us_layout[index]);
-            break;
+            return us_layout[index];
       }
    }
    /* Key released */
@@ -159,9 +176,27 @@ void keyboard_handler(Stack *registers)
             break;
       }
    }
+
+   return 0;
+}
+
+void keyboard_handler(Stack *registers)
+{
+   /* Unused parameter (avoid a warning) */
+   (void)(registers);
+   
+   unsigned char c = keyboard_getscancode();
+   /* If it is a character, add it to the input buffer */
+   if(c) {
+      buffer[buffer_index] = c;
+      ++buffer_index;
+      if(buffer_index == KEYBOARD_BUFFER_SIZE)
+         keyboard_clear_buffer();
+   }
 }
 
 void keyboard_install(void)
 {
+   keyboard_clear_buffer();
    irq_install_handler(1, keyboard_handler);
 }

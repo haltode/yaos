@@ -1,13 +1,16 @@
 #ifndef _SYS_H
 #define _SYS_H 1
 
-#define PUTCHAR_SYSCALL    0
+enum syscall_t {
+   PUTCHAR_SYSCALL,
+   GETCHAR_SYSCALL,
 
-#define MALLOC_SYSCALL     1
-#define FREE_SYSCALL       2
-#define CALLOC_SYSCALL     3
+   MALLOC_SYSCALL,
+   FREE_SYSCALL,
+   CALLOC_SYSCALL,
 
-#define ABORT_SYSCALL      4
+   ABORT_SYSCALL
+};
 
 #ifdef __cplusplus
 extern "C" {

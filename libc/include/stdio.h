@@ -14,6 +14,8 @@ int putchar(int c);
 int puts(const char *str);
 int vprintf(const char *format, va_list arg);
 
+int getchar(void);
+
 #ifdef __cplusplus
 }
 #endif
