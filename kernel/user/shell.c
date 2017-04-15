@@ -51,10 +51,21 @@ void shell_parse_input(char *input)
 {
    char *command = strtok(input, " \n");
    char *first_param = strtok(NULL, " \n");
-   if(command)
-      printf("command: '%s'\n", command);
-   if(first_param)
-      printf("first_param: '%s'\n", first_param);
+
+   if(strcmp(command, "ls") == 0)
+      shell_ls_command();
+   else if(strcmp(command, "cd") == 0)
+      shell_cd_command(first_param);
+   else if(strcmp(command, "cat") == 0)
+      shell_cat_command(first_param);
+   else if(strcmp(command, "help") == 0)
+      shell_help_command();
+   else if(strcmp(command, "exit") == 0)
+      shell_exit_command();
+   else {
+      printf("Unknown command: '%s'\n", command);
+      printf("Type 'help' to print out the list of commands.\n");
+   }
 }
 
 void shell_ls_command(void)
@@ -74,7 +85,12 @@ void shell_cat_command(char *path)
 
 void shell_help_command(void)
 {
-
+   puts("List of available commands:");
+   puts("ls - list directory contents");
+   puts("cd [directory] - change the working directory");
+   puts("cat [file] - print out file content");
+   puts("help - print out this help menu");
+   puts("exit - cause the shell to exit");
 }
 
 void shell_exit_command(void)
