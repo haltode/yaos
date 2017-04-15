@@ -49,14 +49,11 @@ void kernel_main(Multiboot_info *args)
    vfs_init();
    kernel_log(INFO_MSG, "Virtual file system initialized");
    
-   puts("");
-   puts("Hello kernel world!");
-
    syscall_init();
    enter_user_space();
 
    puts("");
-   puts("Hello user world!");
+   printf("==============================     USER SPACE     ==============================");
 
    shell_init();
 }

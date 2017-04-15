@@ -16,6 +16,7 @@ void shell_init(void)
    size_t i;
    char c;
    while(true) {
+      puts("");
       printf("user: %s> ", current_dir->name);
 
       i = 0;

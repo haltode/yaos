@@ -27,7 +27,7 @@ $ make run
 
 ### What you should see
 
-TODO: insert images
+![yaos running in qemu](/img/yaos_running.png)
 
 ## Resources used for this project
 
