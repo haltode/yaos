@@ -8,8 +8,9 @@
 #include <kernel/sys.h>
 #include <kernel/syscall.h>
 #include <kernel/tty.h>
+#include <kernel/vfs.h>
 
-#define NB_SYSCALL 6
+#define NB_SYSCALL 12
 
 void *syscalls[NB_SYSCALL] = {
    terminal_write,
@@ -18,6 +19,13 @@ void *syscalls[NB_SYSCALL] = {
    DougLea_malloc,
    DougLea_free,
    DougLea_calloc,
+
+   vfs_open,
+   vfs_close,
+   vfs_read,
+   vfs_write,
+   vfs_read_dir,
+   vfs_find_dir,
 
    sys_halt
 };
