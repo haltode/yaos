@@ -31,28 +31,28 @@ void test_phys_mem(void)
 
 void test_heap(void)
 {
-   int *ret = kmalloc(8);
+   int *ret = malloc(8);
    printf("ret: 0x%x\n", ret);
    printf("*ret: 0x%x\n", *ret);
    printf("&ret: 0x%x\n", &ret);
 
-   int *ret2 = kmalloc(8);
+   int *ret2 = malloc(8);
    printf("ret2: 0x%x\n", ret2);
    printf("*ret2: 0x%x\n", *ret2);
    printf("&ret2: 0x%x\n", &ret2);
 
-   kfree(ret);
+   free(ret);
    printf("ret: 0x%x\n", ret);
    printf("*ret: 0x%x\n", *ret);
    printf("&ret: 0x%x\n", &ret);
 
-   int *ret3 = kmalloc(8);
+   int *ret3 = malloc(8);
    printf("ret3: 0x%x\n", ret3);
    printf("*ret3: 0x%x\n", *ret3);
    printf("&ret3: 0x%x\n", &ret3);
 
-   kfree(ret2);
-   kfree(ret3);
+   free(ret2);
+   free(ret3);
 }
 
 void test_doug_lea(void)

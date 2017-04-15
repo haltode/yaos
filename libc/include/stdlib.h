@@ -11,9 +11,9 @@ __attribute__((__noreturn__))
 void abort(void);
 
 /* Dynamic memory management */
-void *kcalloc(size_t num, size_t size);
-void *kmalloc(size_t size);
-void kfree(void *ptr);
+void *calloc(size_t num, size_t size);
+void *malloc(size_t size);
+void free(void *ptr);
 
 /* String conversion */
 char *itoa(int value, char* str, int base);

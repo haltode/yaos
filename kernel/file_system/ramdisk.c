@@ -32,7 +32,7 @@ Vfs_node *ramdisk_init(void)
 
    /* Setup the ramdisk and all the files */
    nb_ramdisk_files = tar_get_nb_files(init_entry);
-   ramdisk_files = kcalloc(nb_ramdisk_files, sizeof(Vfs_node));
+   ramdisk_files = calloc(nb_ramdisk_files, sizeof(Vfs_node));
    assert(ramdisk_files != NULL);
 
    strcpy(ramdisk.name, "/");
