@@ -48,8 +48,6 @@ struct gdt_ptr_t {
    uint32_t base;
 } __attribute__((packed));
 
-/* TODO: more info about TSS structure */
-
 typedef struct tss_entry_t Tss_entry;
 struct tss_entry_t {
    uint32_t prevTss;
