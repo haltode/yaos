@@ -13,13 +13,10 @@ Here are a few resources that helped me create the kernel.
 ### Memory
 
 - GDT (Global Descriptor Table)
-
    - [OSDev.org - Global Descriptor Table](http://wiki.osdev.org/Global_Descriptor_Table)
    - [OSDev.org - GDT Tutorial](http://wiki.osdev.org/GDT_Tutorial)
    - [Bran's Kernel Development - The GDT](http://www.osdever.net/bkerndev/Docs/gdt.htm)
-
 - Paging
-
    - [OSDev.org - Memory Management](http://wiki.osdev.org/Memory_Management)
    - [OSDev.org - Paging](http://wiki.osdev.org/Paging)
    - [OSDev.org - Page Fault](http://wiki.osdev.org/Page_Fault)
@@ -28,41 +25,29 @@ Here are a few resources that helped me create the kernel.
    - [How to make an OS - Theory: physical and virtual memory](https://samypesse.gitbooks.io/how-to-create-an-operating-system/content/Chapter-8/)
    - [OSDev.org - Setting Up Paging](http://wiki.osdev.org/Setting_Up_Paging)
    - [Little OS Book - Paging](https://littleosbook.github.io/#paging)
-
 - Physical memory
-
    - [Operating Systems Development - Physical Memory](http://www.brokenthorn.com/Resources/OSDev17.html)
    - [osdever.net - Memory Management 1](http://www.osdever.net/tutorials/view/memory-management-1)
    - [OSDev.org - Detecting Memory](http://wiki.osdev.org/Detecting_Memory_(x86))
    - [OSDEV: Implementing a basic x86 page frame allocator in C](https://anastas.io/osdev/memory/2016/08/08/page-frame-allocator.html)
-
 - Virtual memory
-
    - [Operating Systems Development - Virtual Memory](http://www.brokenthorn.com/Resources/OSDev18.html)
    - [osdever.net - Memory Management 2](http://www.osdever.net/tutorials/view/memory-management-2)
    - [Mapping With A Recursive Page Directory](http://www.rohitab.com/discuss/topic/31139-tutorial-paging-memory-mapping-with-a-recursive-page-directory/)
-
 - Memory allocator
-
    - [A Memory Allocator - Doug Lea](http://g.oswego.edu/dl/html/malloc.html)
 
 ### Interrupts
 
 - [OSDev.org - Interrupts](http://wiki.osdev.org/Interrupts)
 - [OSDev.org - I Can't Get Interrupts Working](http://wiki.osdev.org/I_Can't_Get_Interrupts_Working)
-
 - IDT (Interrupt Descriptor Table)
-
    - [Bran's Kernel Development - The IDT](http://www.osdever.net/bkerndev/Docs/idt.htm)
    - [OSDev.org - Interrupt Descriptor Table](http://wiki.osdev.org/Interrupt_Descriptor_Table)
-
 - ISR (Interrupt Service Routine)
-
    - [Bran's Kernel Development - Interrupt Service Routines](http://www.osdever.net/bkerndev/Docs/isrs.htm)
    - [OSDev.org - Interrupt Service Routines](http://wiki.osdev.org/Interrupt_Service_Routines)
-
 - IRQ (Interrupt Request)
-
    - [Bran's Kernel Development - IRQs and PICs](http://www.osdever.net/bkerndev/Docs/irqs.htm)
    - [OSDev.org - PIC](http://wiki.osdev.org/PIC)
 
