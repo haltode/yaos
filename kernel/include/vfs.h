@@ -25,9 +25,6 @@ struct vfs_node_t {
    uint32_t (*write) (Vfs_node *file, uint32_t offset, size_t size, const char *buffer);
    Vfs_node *(*read_dir) (Vfs_node *dir, uint32_t index);
    Vfs_node *(*find_dir) (Vfs_node *dir, const char *path);
-
-   /* Used by mountpoints and symlinks */
-   Vfs_node *ptr;
 };
 
 void vfs_init(void);

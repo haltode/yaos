@@ -49,7 +49,6 @@ Vfs_node *ramdisk_init(void)
    ramdisk.write      = NULL;
    ramdisk.read_dir   = ramdisk_read_dir;
    ramdisk.find_dir   = ramdisk_find_dir;
-   ramdisk.ptr        = NULL;
 
    ramdisk_parse_files();
 
@@ -78,7 +77,6 @@ void ramdisk_parse_files(void)
       ramdisk_files[i].write      = NULL;
       ramdisk_files[i].read_dir   = ramdisk_read_dir;
       ramdisk_files[i].find_dir   = ramdisk_find_dir;
-      ramdisk_files[i].ptr        = NULL;
 
       switch(current->type[0]) {
          case FILE_TAR_TYPE:
