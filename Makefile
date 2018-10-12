@@ -151,22 +151,22 @@ debug:
 ############
 
 clean_kernel:
-	rm -f $(KERNEL_BIN)
-	rm -f $(KERNEL_COMPLETE_OBJS)
-	rm -f $(KERNEL_COMPLETE_OBJS:.o=.d)
+	${RM} -f $(KERNEL_BIN)
+	${RM} -f $(KERNEL_COMPLETE_OBJS)
+	${RM} -f $(KERNEL_COMPLETE_OBJS:.o=.d)
 
 clean_libc:
-	rm -f $(LIBC_BIN)
-	rm -f $(LIBC_OBJS)
-	rm -f $(LIBC_OBJS:.o=.d)
+	${RM} -f $(LIBC_BIN)
+	${RM} -f $(LIBC_OBJS)
+	${RM} -f $(LIBC_OBJS:.o=.d)
 
 clean_libk:
-	rm -f $(LIBK_BIN)
-	rm -f $(LIBK_OBJS)
-	rm -f $(LIBK_OBJS:.libk.o=.libk.d)
+	${RM} -f $(LIBK_BIN)
+	${RM} -f $(LIBK_OBJS)
+	${RM} -f $(LIBK_OBJS:.libk.o=.libk.d)
 
 clean: clean_kernel clean_libc clean_libk
-	rm -fv $(CONFIG)/initrd.tar
-	rm -rfv $(SYSROOT)
-	rm -rfv isodir
-	rm -rfv yaos.iso
+	${RM} -fv $(CONFIG)/initrd.tar
+	${RM} -rfv $(SYSROOT)
+	${RM} -rfv isodir
+	${RM} -rfv yaos.iso
